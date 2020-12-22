@@ -78,7 +78,7 @@ Guild.findOne({ _id: message.guild.id }, async function (err, server) {
                await client.users.fetch(idBOT).then(async(f) => {
 
                 await Guild.findOneAndUpdate({_id: message.guild.id}, {$set: { 'addBot.lastUser': "null", 'addBot.time': Date.now() - 300000 }})
-                            await User.findOneAndUpdate({_id: message.author.id}, {$set: { 'addBot.haveSoli': true}})
+                            await User.findOneAndUpdate({_id: message.author.id}, {$set: { 'addBot.haveSoli': true, 'addBot.idBot': idBOT}})
 
                 message.author.send(`${message.author}, seu bot foi enviado com sucesso, aguarde até que algum Staff o aceite.`)
                 client.channels.cache.get("791055688796864522").send(BotAdd)

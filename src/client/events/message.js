@@ -13,7 +13,7 @@ module.exports = async (client, message) => {
 
         if (message.content.match(GetMention(client.user.id))) {
           message.channel.send(
-            `Olá ${message.author}, meu prefixo no servidor é **${prefix}**.`
+            `Olá ${message.author}, meu prefixo no servidor é **${prefix}**.\n\nPara saber meus comandos use **\`${prefix}help\`**`
           );
         }
 

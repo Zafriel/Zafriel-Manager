@@ -5,10 +5,14 @@ let guildSchema = new Schema({
   _id: { type: String, required: true },
   prefix: { type: String, default: "z!" },
   addBot: {
-    lastUser: {type: String, default: "null"},
-    time: {type: Number, default: 0}
-  }
+    lastUser: { type: String, default: "null" },
+    time: { type: Number, default: 0 },
+  },
+  staff: {
+    type: Array,
+    default: [],
+  },
 });
 
-let Guild = mongoose.model("Guilds", guildSchema)
+let Guild = mongoose.model("Guilds", guildSchema);
 module.exports = Guild;

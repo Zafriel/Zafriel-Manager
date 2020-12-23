@@ -8,7 +8,7 @@ exports.run = (client, message, args) => {
     .setAuthor(`${client.user.username} - Central de Ajuda`, client.user.displayAvatarURL({dynamic: true}))
     .addFields({
         name: "Staff",
-        value: "\`aceitar\`, \`recusar\`, \`remover\`, \`set\`"
+        value: "\`aceitar\`, \`recusar\`, \`remover\`, \`set\`, \`debug\`"
     },
     {
         name: "Utils",

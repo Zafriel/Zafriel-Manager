@@ -52,7 +52,16 @@ Guild.findOne({ _id: message.guild.id }, async function (err, server) {
            
                 const BotAdd = new Discord.MessageEmbed()
                 .setColor(process.env.EMBED_COLOR)
-                .addFields({
+                .addFields(
+                    {
+                        name: "Dono do Bot",
+                        value: message.author.tag
+                    },
+                    {
+                        name: "ID do Dono",
+                        value: message.author.id
+                    },
+                    {
                     name: "ID do Bot", 
                     value: idBOT
                 }, 

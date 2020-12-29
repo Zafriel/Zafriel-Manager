@@ -12,7 +12,7 @@ exports.run = (client, message, args) => {
     },
     {
         name: "Utils",
-        value: "\`info\`, \`addbot\`, \`staff\`"
+        value: "\`info\`, \`addbot\`, \`staff\`, \`partner\`"
     })
     .setThumbnail(client.user.displayAvatarURL({dynamic: true, size: 2048}))
     .setFooter(`Pedido por ${message.author.username}`, message.author.displayAvatarURL({dynamic: true}))

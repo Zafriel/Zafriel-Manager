@@ -21,6 +21,6 @@ exports.run = async (client, message, args) => {
 };
 
 exports.help = {
-  name: "aceitar",
+  name: "debug",
   aliases: [],
 };

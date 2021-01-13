@@ -17,7 +17,7 @@ exports.run = async (client, message, args) => {
       .awaitMessages(
         (m) =>
           m.author.id === message.author.id &&
-          m.content === "confirmar".toLocaleLowerCase(),
+          m.content.toLocaleLowerCase() === "confirmar",
         {
           max: 1,
           time: 20000,

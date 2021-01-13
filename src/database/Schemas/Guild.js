@@ -12,6 +12,10 @@ let guildSchema = new Schema({
     type: Array,
     default: [],
   },
+  cmd: {
+    type: Array,
+    default: [{ name: "null", desc: "null", author: "null", date: "null" }],
+  },
 });
 
 let Guild = mongoose.model("Guilds", guildSchema);

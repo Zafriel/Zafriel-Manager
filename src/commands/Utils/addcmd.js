@@ -17,14 +17,29 @@ exports.run = async (client, message, args) => {
         return message.quote(
           `${message.author}, já há um comando com esse nome.`
         );
-      } else if (!args[1]) {
+      } else if (!args.slice(1).join(" ")) {
         return message.quote(
           `${message.author}, você deve inserir o comando que deseja enviar. **( SEM CODE-BLOCK )**`
         );
       } else {
 
-        message.channel.send(`${message.author}, deseja enviar o comando **${args[0]}** para avaliação?`)
+        message.delete().catch(O_o => {})
 
+        message.channel.send(`${message.author}, deseja enviar o comando **${args[0]}** para avaliação?`).then(async (msgReact) => {
+            for (let emoji of ["✅", "❌"])
+              await msgReact.react(emoji);
+            msgReact
+              .awaitReactions(
+                (reaction, user) =>
+                  user.id == message.author.id &&
+                  ["✅", "❌"].includes(
+                    reaction.emoji.name
+                  ),
+                { max: 1 }
+              )
+              .then(async (collected) => {
+                if (collected.first().emoji.name == "✅") {
+                  
       sourcebin.create([
         {
         name: args[0],
@@ -36,8 +51,6 @@ exports.run = async (client, message, args) => {
       description: 'Zafriel Manager - Comandos'
     }).then(async (x) => {
       
-      console.log(x)
-
       await Guild.findOneAndUpdate(
         { _id: message.guild.id },
         {
@@ -54,8 +67,45 @@ exports.run = async (client, message, args) => {
           },
         }
       );
-      message.quote(`${message.author}, ok, seu comando **${x.url}** foi enviado para avaliação.`);
+      const CmdAdd = new Discord.MessageEmbed()
+      .setColor(process.env.EMBED_COLOR)
+      .addFields(
+          {
+              name: "Author",
+              value: message.author.tag
+          },
+          {
+              name: "ID",
+              value: message.author.id
+          },
+          {
+          name: "Comando", 
+          value: x.url
+      }, 
+      {
+          name: "Comando enviado em",
+          value: moment(Date.now()).format("LLLL")
+      },
+)
+      .setFooter(`Comando enviado por: ${message.author.tag}`, message.author.avatarURL({dynamic: true}))
+      .setThumbnail(message.author.avatarURL({dynamic: true}))
+
+      message.quote(`${message.author}, ok, seu comando **${args[0]}** foi enviado para avaliação.`);
+      client.channels.cache.get("799636802364637194").send(`<:idle:687577177943965696> ${message.author} enviou o comando **\`${args[0]}\`** para avaliação.`)
+      client.channels.cache.get("791055688796864522").send(CmdAdd)
+
     }).catch(console.error);
+                  msgReact.delete();
+                }
+                if (collected.first().emoji.name == "❌") {
+        
+                  message.quote(`${message.author}, ok, cancelei o envio do seu comando.`)
+
+                  msgReact.delete();
+                }
+              });
+          });
+     
   }
     });
     

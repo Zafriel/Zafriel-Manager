@@ -1,5 +1,5 @@
 const Guild = require("../../database/Schemas/Guild");
-const User = require("../../database/Schemas/User");
+const Guild = require("../../database/Schemas/Guild");
 
 exports.run = async (client, message, args) => {
   Guild.findOne({ _id: message.guild.id }, async function (err, server) {

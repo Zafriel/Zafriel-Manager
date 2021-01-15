@@ -52,5 +52,7 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "cmd",
   aliases: [],
-  category: "Utils"
+  category: "Utils",
+  description: "Use este comando para pegar algum comando enviado por um usuário",
+  usage: "cmd <cmd name>"
 };

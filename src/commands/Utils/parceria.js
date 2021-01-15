@@ -42,5 +42,7 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "parceria",
   aliases: ["partner"],
-  category: "Utils"
+  category: "Utils",
+  description: "Use este comando para requisitar um pedido de parceria",
+  usage: "parceria"
 };

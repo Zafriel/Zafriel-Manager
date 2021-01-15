@@ -15,5 +15,7 @@ Guild.findOne({ _id: message.guild.id }, async function (err, server) {
 exports.help = {
 name: "staff",
 aliases: [],
-category: "Information"
+category: "Information",
+description: "Use este comando para a lista de staffs do servidor",
+usage: "staff"
 };

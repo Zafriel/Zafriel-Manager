@@ -25,5 +25,7 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "remover",
   aliases: ["remove"],
-  category: "Staff"
+  category: "Staff",
+  description: "Use este comando para remover um bot de alguém membro;",
+  usage: "remover <user>"
 };

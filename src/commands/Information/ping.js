@@ -7,5 +7,7 @@ exports.run = (client, message, args) => {
 exports.help = {
   name: "ping",
   aliases: ["pong"],
-  category: "Information"
+  category: "Information",
+  description: "Use este comando para ver o ping do bot",
+  usage: "ping"
 };

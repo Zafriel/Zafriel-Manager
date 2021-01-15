@@ -23,5 +23,7 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "debug",
   aliases: [],
-  category: "Staff"
+  category: "Staff",
+  description: "Use este comando para desbugar um usuário",
+  usage: "debug <user>"
 };

@@ -31,5 +31,7 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "recusar",
   aliases: [],
-  category: "Staff"
+  category: "Staff",
+  description: "Use este comando para recusar o bot/cmd de algum membro",
+  usage: "recusar <bot/cmd>"
 };

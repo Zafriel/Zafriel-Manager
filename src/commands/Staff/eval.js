@@ -14,5 +14,7 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "eval",
   aliases: [],
-  category: "Staff"
+  category: "Staff",
+  description: "Use este comando para testar códigos em JS",
+  usage: "eval <cód>"
 };

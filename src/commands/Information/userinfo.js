@@ -95,5 +95,7 @@ exports.run = (client, message, args) => {
 exports.help = {
   name: "userinfo",
   aliases: ["ui"],
-  category: "Information"
+  category: "Information",
+  description: "Use este comando para ver as informações de um usuário",
+  usage: "userinfo <user>"
 };

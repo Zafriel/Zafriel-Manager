@@ -26,7 +26,7 @@ exports.run = async (client, message, args) => {
         );
 
       let EMBED = new Discord.MessageEmbed()
-        .setAuthor(`Informações do Not do usuário ${USER.user.tag}`)
+        .setAuthor(`Informações do Bot do usuário ${USER.user.tag}`)
         .addFields(
           {
             name: `Nome`,

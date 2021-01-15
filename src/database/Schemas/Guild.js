@@ -14,7 +14,16 @@ let guildSchema = new Schema({
   },
   cmd: {
     type: Array,
-    default: [{ name: "null", author: "null", date: "null", key: "null", url: "null" }],
+    default: [
+      {
+        name: "null",
+        author: "null",
+        date: "null",
+        key: "null",
+        url: "null",
+        verifiy: false,
+      },
+    ],
   },
 });
 

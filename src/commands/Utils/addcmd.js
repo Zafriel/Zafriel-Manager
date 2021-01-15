@@ -3,7 +3,7 @@ const moment = require("moment");
 require("moment-duration-format");
 const Guild = require("../../database/Schemas/Guild");
 const User = require("../../database/Schemas/User");
-const sourcebin = require('sourcebin');
+const sourcebin = require("sourcebin");
 
 exports.run = async (client, message, args) => {
   moment.locale("pt-BR");
@@ -22,93 +22,107 @@ exports.run = async (client, message, args) => {
           `${message.author}, você deve inserir o comando que deseja enviar. **( SEM CODE-BLOCK )**`
         );
       } else {
-
-        message.delete().catch(O_o => {})
-
-        message.channel.send(`${message.author}, deseja enviar o comando **${args[0]}** para avaliação?`).then(async (msgReact) => {
-            for (let emoji of ["✅", "❌"])
-              await msgReact.react(emoji);
+        message.channel
+          .send(
+            `${message.author}, deseja enviar o comando **${args[0]}** para avaliação?`
+          )
+          .then(async (msgReact) => {
+            for (let emoji of ["✅", "❌"]) await msgReact.react(emoji);
             msgReact
               .awaitReactions(
                 (reaction, user) =>
                   user.id == message.author.id &&
-                  ["✅", "❌"].includes(
-                    reaction.emoji.name
-                  ),
+                  ["✅", "❌"].includes(reaction.emoji.name),
                 { max: 1 }
               )
               .then(async (collected) => {
                 if (collected.first().emoji.name == "✅") {
-                  
-      sourcebin.create([
-        {
-        name: args[0],
-            content: args.slice(1).join(" "),
-            languageId: 'text'
-        }
-    ], { 
-      title: args[0],
-      description: 'Zafriel Manager - Comandos'
-    }).then(async (x) => {
-      
-      await Guild.findOneAndUpdate(
-        { _id: message.guild.id },
-        {
-          $push: {
-            cmd: [
-              {
-                name: args[0],
-                author: message.author.id,
-                date: Date.now(),
-                key: x.key,
-                url: x.url
-              },
-            ],
-          },
-        }
-      );
-      const CmdAdd = new Discord.MessageEmbed()
-      .setColor(process.env.EMBED_COLOR)
-      .addFields(
-          {
-              name: "Author",
-              value: message.author.tag
-          },
-          {
-              name: "ID",
-              value: message.author.id
-          },
-          {
-          name: "Comando", 
-          value: x.url
-      }, 
-      {
-          name: "Comando enviado em",
-          value: moment(Date.now()).format("LLLL")
-      },
-)
-      .setFooter(`Comando enviado por: ${message.author.tag}`, message.author.avatarURL({dynamic: true}))
-      .setThumbnail(message.author.avatarURL({dynamic: true}))
+                  sourcebin
+                    .create(
+                      [
+                        {
+                          name: args[0],
+                          content: args.slice(1).join(" "),
+                          languageId: "text",
+                        },
+                      ],
+                      {
+                        title: args[0],
+                        description: "Zafriel Manager - Comandos",
+                      }
+                    )
+                    .then(async (x) => {
+                      await Guild.findOneAndUpdate(
+                        { _id: message.guild.id },
+                        {
+                          $push: {
+                            cmd: [
+                              {
+                                name: args[0],
+                                author: message.author.id,
+                                date: Date.now(),
+                                key: x.key,
+                                url: x.url,
+                                verify: false,
+                              },
+                            ],
+                          },
+                        }
+                      );
+                      const CmdAdd = new Discord.MessageEmbed()
+                        .setColor(process.env.EMBED_COLOR)
+                        .addFields(
+                          {
+                            name: "Author",
+                            value: message.author.tag,
+                          },
+                          {
+                            name: "ID",
+                            value: message.author.id,
+                          },
+                          {
+                            name: "Comando",
+                            value: x.url,
+                          },
+                          {
+                            name: "Comando enviado em",
+                            value: moment(Date.now()).format("LLLL"),
+                          }
+                        )
+                        .setFooter(
+                          `Comando enviado por: ${message.author.tag}`,
+                          message.author.avatarURL({ dynamic: true })
+                        )
+                        .setThumbnail(
+                          message.author.avatarURL({ dynamic: true })
+                        );
 
-      message.quote(`${message.author}, ok, seu comando **${args[0]}** foi enviado para avaliação.`);
-      client.channels.cache.get("799636802364637194").send(`<:idle:687577177943965696> ${message.author} enviou o comando **\`${args[0]}\`** para avaliação.`)
-      client.channels.cache.get("791055688796864522").send(CmdAdd)
-
-    }).catch(console.error);
+                      message.quote(
+                        `${message.author}, ok, seu comando **${args[0]}** foi enviado para avaliação.`
+                      );
+                      client.channels.cache
+                        .get("799636802364637194")
+                        .send(
+                          `<:idle:687577177943965696> ${message.author} enviou o comando **\`${args[0]}\`** para avaliação.`
+                        );
+                      client.channels.cache
+                        .get("791055688796864522")
+                        .send(CmdAdd);
+                    })
+                    .catch(console.error);
                   msgReact.delete();
                 }
                 if (collected.first().emoji.name == "❌") {
-        
-                  message.quote(`${message.author}, ok, cancelei o envio do seu comando.`)
+                  message.quote(
+                    `${message.author}, ok, cancelei o envio do seu comando.`
+                  );
 
                   msgReact.delete();
                 }
               });
           });
-     
-  }
+      }
     });
-    
   });
 };
 exports.help = {
@@ -116,5 +130,5 @@ exports.help = {
   aliases: [],
   category: "Utils",
   description: "Use este comando para enviar um comando para o servidor",
-  usage: "addcmd <cmd name> <cmd>"
+  usage: "addcmd <cmd name> <cmd>",
 };

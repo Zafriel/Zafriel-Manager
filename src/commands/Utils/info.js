@@ -59,4 +59,5 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "info",
   aliases: [],
+  category: "Utils"
 };

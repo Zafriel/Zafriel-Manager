@@ -15,4 +15,5 @@ Guild.findOne({ _id: message.guild.id }, async function (err, server) {
 exports.help = {
 name: "staff",
 aliases: [],
+category: "Information"
 };

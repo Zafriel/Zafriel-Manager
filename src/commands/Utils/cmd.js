@@ -3,6 +3,7 @@ const moment = require("moment");
 require("moment-duration-format");
 const Guild = require("../../database/Schemas/Guild");
 const User = require("../../database/Schemas/User");
+// const sourcebin = require('sourcebin');
 
 exports.run = async (client, message, args) => {
   moment.locale("pt-BR");
@@ -25,7 +26,7 @@ exports.run = async (client, message, args) => {
             },
             {
               name: `Comando:`,
-              value: `\`\`\`${cmd.desc}\`\`\``,
+              value: `**[Clique Aqui](${cmd.url})**`,
             },
             {
               name: "Enviado por",
@@ -44,4 +45,5 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "cmd",
   aliases: [],
+  category: "Utils"
 };

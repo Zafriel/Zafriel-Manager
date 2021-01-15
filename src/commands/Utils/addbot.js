@@ -103,4 +103,5 @@ Guild.findOne({ _id: message.guild.id }, async function (err, server) {
 exports.help = {
 name: "addbot",
 aliases: [],
+category: "Utils"
 };

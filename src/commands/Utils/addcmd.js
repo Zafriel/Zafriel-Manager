@@ -3,6 +3,7 @@ const moment = require("moment");
 require("moment-duration-format");
 const Guild = require("../../database/Schemas/Guild");
 const User = require("../../database/Schemas/User");
+const sourcebin = require('sourcebin');
 
 exports.run = async (client, message, args) => {
   moment.locale("pt-BR");
@@ -21,8 +22,21 @@ exports.run = async (client, message, args) => {
           `${message.author}, você deve inserir o comando que deseja enviar. **( SEM CODE-BLOCK )**`
         );
       } else {
-        message.quote(`${message.author}, ok, enviei o comando com sucesso.`);
-      }
+
+        message.channel.send(`${message.author}, deseja enviar o comando **${args[0]}** para avaliação?`)
+
+      sourcebin.create([
+        {
+        name: args[0],
+            content: args.slice(1).join(" "),
+            languageId: 'text'
+        }
+    ], { 
+      title: args[0],
+      description: 'Zafriel Manager - Comandos'
+    }).then(async (x) => {
+      
+      console.log(x)
 
       await Guild.findOneAndUpdate(
         { _id: message.guild.id },
@@ -31,18 +45,24 @@ exports.run = async (client, message, args) => {
             cmd: [
               {
                 name: args[0],
-                desc: args.slice(1).join(" "),
                 author: message.author.id,
                 date: Date.now(),
+                key: x.key,
+                url: x.url
               },
             ],
           },
         }
       );
+      message.quote(`${message.author}, ok, seu comando **${x.url}** foi enviado para avaliação.`);
+    }).catch(console.error);
+  }
     });
+    
   });
 };
 exports.help = {
   name: "addcmd",
   aliases: [],
+  category: "Utils"
 };

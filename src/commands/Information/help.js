@@ -25,5 +25,6 @@ exports.run = (client, message, args) => {
   exports.help = {
     name: "help",
     aliases: ["ajuda"],
+    category: "Information"
   };
   

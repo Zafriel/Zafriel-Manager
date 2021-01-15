@@ -6,7 +6,7 @@ exports.run = (client, message, args) => {
 
     if (!prefixos) {
       return message.channel.send(
-        `${message.author}, você não inseriu nenhum prefixo para eu alterar.`
+        `${message.author}, você não inseriu nenhum prefixo para eu alterar.AATEST`
       );
     } else if (prefixos.length > 5) {
       return message.channel.send(
@@ -32,4 +32,5 @@ exports.run = (client, message, args) => {
 exports.help = {
   name: "prefix",
   aliases: ["prefixo"],
+  category: "Config"
 };

@@ -80,4 +80,5 @@ exports.run = (client, message) => {
 exports.help = {
   name: "serverinfo",
   aliases: ["si"],
+  category: "Information"
 };

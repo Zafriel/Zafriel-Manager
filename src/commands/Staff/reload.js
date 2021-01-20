@@ -37,5 +37,5 @@ exports.help = {
   aliases: ["r"],
   category: "Staff",
   description: "Use este comando para reiniciar algum comando",
-  usage: "reload <cmd name/aliases>"
+  usage: "reload <cmd name/aliases>",
 };

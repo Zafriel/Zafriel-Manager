@@ -9,8 +9,9 @@ let userSchema = new Schema({
     haveBot: { type: Boolean, default: false },
     acceptBy: { type: String, default: "null" },
     votes: { type: Number, default: 0 },
-    acceptIn: {type: Number, default: 0}
+    acceptIn: { type: Number, default: 0 },
   },
+  help: { type: Boolean, default: false },
 });
 
 const User = mongoose.model("Users", userSchema);

@@ -10,7 +10,7 @@ exports.run = async (client, message, args) => {
 
     if (!args[0])
       return message.channel.send(
-        `${message.author}, você deve inserir se deseja verificar um bot ou um comando.`
+        `${message.author}, você deve inserir se deseja remover um bot ou um comando.\n**${server.prefix}remover <cmd/bot>`
       );
 
     if (args[0].toLowerCase() == "cmd") {

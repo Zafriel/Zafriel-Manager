@@ -16,5 +16,5 @@ exports.help = {
   aliases: [],
   category: "Staff",
   description: "Use este comando para testar códigos em JS",
-  usage: "eval <cód>"
+  usage: "eval <cód>",
 };

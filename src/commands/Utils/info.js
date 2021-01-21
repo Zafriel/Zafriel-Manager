@@ -61,5 +61,5 @@ exports.help = {
   aliases: [],
   category: "Utils",
   description: "Use este comando para ver informações sobre o Bot de alguém",
-  usage: "info <user>"
+  usage: "info <user>",
 };

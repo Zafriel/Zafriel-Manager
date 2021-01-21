@@ -1,6 +1,7 @@
 const Guild = require("../../database/Schemas/Guild");
 const User = require("../../database/Schemas/User");
-
+const Discord = require("discord.js");
+const moment = require("moment");
 const GetMention = (id) => new RegExp(`^<@!?${id}>( |)$`);
 
 module.exports = async (client, message) => {
@@ -39,7 +40,7 @@ module.exports = async (client, message) => {
 
         if (user) {
           if (server) {
-            var prefix = server.prefix;
+            const prefix = server.prefix;
 
             if (message.content.match(GetMention(client.user.id))) {
               message.channel.send(
@@ -64,6 +65,8 @@ module.exports = async (client, message) => {
         } else {
           User.create({ _id: message.author.id });
         }
+
+        
       });
     });
   } catch (err) {

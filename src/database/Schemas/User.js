@@ -12,6 +12,11 @@ let userSchema = new Schema({
     acceptIn: { type: Number, default: 0 },
   },
   help: { type: Boolean, default: false },
+  ticket: {
+    have: { type: Boolean, default: false },
+    channel: { type: String, default: "null" },
+    created: {type: String, default: "null"}
+  },
 });
 
 const User = mongoose.model("Users", userSchema);

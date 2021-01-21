@@ -25,6 +25,10 @@ let guildSchema = new Schema({
       },
     ],
   },
+  ticket: {
+    size: { type: Number, default: 1 },
+    msg: {type: String,default: "null"}
+  },
 });
 
 let Guild = mongoose.model("Guilds", guildSchema);

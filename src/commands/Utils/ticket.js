@@ -152,7 +152,7 @@ exports.run = async (client, message, args) => {
         .setDescription(
           `${
             !user.ticket.have
-              ? `Desculpe, mas este usuário não tem nenhum **TICKET** em aberto no momento.\n\nPara abrir um **TICKET** basta ir no canal: <#${client.channels.cache.get('783310976677183488').id}>`
+              ? `Desculpe, mas este usuário não tem nenhum **TICKET** em aberto no momento.`
               : `Este membro possuí **1 TICKET** em aberto no momento, informações:\n\nCanal: <#${
                   user.ticket.channel
                 }>\nData de abertura do **TICKET**: **( há **${String(

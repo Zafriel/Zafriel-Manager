@@ -14,8 +14,8 @@ exports.run = async (client, message, args) => {
   const USER1 =
     message.mentions.users.first() || client.users.cache.get(args[0]);
 
-  Guild.findOne({ _id: message.guild.id }, async function (err, server) {
-    User.findOne({ _id: USER.id }, async function (err, user) {
+  Guild.findOne({ _id: message.guild.id }, async (err, server) => {
+    User.findOne({ _id: USER.id }, async (err, user)  =>{
       if (args[0] == "msg") {
         if (!server.staff.some((x) => x === message.author.id))
           return message.channel
@@ -55,7 +55,7 @@ exports.run = async (client, message, args) => {
             )
             .then((x) => x.delete({ timeout: 5000 }));
         }
-        User.findOne({ _id: USER1.id }, async function (err, user1) {
+        User.findOne({ _id: USER1.id }, async (err, user1) => {
           if (!user1.ticket.have) {
             return message.channel
               .send(
@@ -79,11 +79,13 @@ exports.run = async (client, message, args) => {
                     .send(
                       `${message.author}, ocorreu um **ERROR** ao executar o comando de fechar o **TICKET**, lembre-se **STAFF** não exclua o canal manualmente...`
                     )
-                    .then((x) => x.delete({ timeout: 5000 }));
+                    .then(async (x) => {
                 await User.findOneAndUpdate(
                   { _id: USER1.id },
                   { $set: { "ticket.have": false, "ticket.channel": "null" } }
                 );
+                x.delete({ timeout: 5000 })
+                    })
               }
               await User.findOneAndUpdate(
                 { _id: USER1.id },
@@ -114,16 +116,20 @@ exports.run = async (client, message, args) => {
                 .find((x) => x.id === user.ticket.channel)
                 .delete();
             } catch (err) {
-              if (err)
+              if (err) {
                 return message.channel
                   .send(
                     `${message.author}, ocorreu um **ERROR** ao executar o comando de fechar o **TICKET**, lembre-se **STAFF** não exclua o canal manualmente...`
                   )
-                  .then((x) => x.delete({ timeout: 5000 }));
+                  .then(async (x) => { 
               await User.findOneAndUpdate(
                 { _id: message.author.id },
                 { $set: { "ticket.have": false, "ticket.channel": "null" } }
               );
+              x.delete({ timeout: 5000 })
+              })
+            }
+          
             }
             await User.findOneAndUpdate(
               { _id: message.author.id },
@@ -146,7 +152,7 @@ exports.run = async (client, message, args) => {
         .setDescription(
           `${
             !user.ticket.have
-              ? "Desculpe, mas este usuário não tem nenhum **TICKET** em aberto no momento.\n\nPara abrir um **TICKET** basta ir no canal: <#783310976677183488>"
+              ? `Desculpe, mas este usuário não tem nenhum **TICKET** em aberto no momento.\n\nPara abrir um **TICKET** basta ir no canal: <#${client.channels.cache.get('783310976677183488').id}>`
               : `Este membro possuí **1 TICKET** em aberto no momento, informações:\n\nCanal: <#${
                   user.ticket.channel
                 }>\nData de abertura do **TICKET**: **( há **${String(

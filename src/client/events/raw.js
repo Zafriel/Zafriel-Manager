@@ -7,7 +7,7 @@ module.exports = async (client, raw) => {
   const guild = client.guilds.cache.get("601848654202011677");
   const member = guild.members.cache.get(raw.d.user_id);
   const us = client.users.cache.get(raw.d.user_id);
-  const msg = guild.channels.cache.get("751976776607203408");
+  const msg = guild.channels.cache.get("801852707051929620");
 
   User.findOne({ _id: us.id }, async (err, user) => {
     Guild.findOne({ _id: guild.id }, async (err, server) => {

@@ -10,33 +10,44 @@ exports.run = async (client, message, args) => {
   const horas = moment(message.createdAt).format("LLLL");
 
   User.findOne({ _id: message.author.id }, async function (err, user) {
-    message.quote(
-      `${message.author}, caso queria enviar um pedido de parceria basta digitar: **\`CONFIRMAR\`**.`
-    );
-    await message.channel
-      .awaitMessages(
-        (m) =>
-          m.author.id === message.author.id &&
-          m.content.toLocaleLowerCase() === "confirmar",
-        {
-          max: 1,
-          time: 20000,
-          errors: ["time"],
-        }
-      )
-      .catch((err) => {
-        return message.quote(`tempo acabado`);
-      });
-
-    message.quote(`${message.author}, pedido de parceria enviado com sucesso!`);
-    client.channels.cache
-      .get("751976777303195650")
+    message.channel
       .send(
-        EMBED.setAuthor(
-          `Novo pedido de Parceria dê: ${message.author.tag}`,
-          message.author.displayAvatarURL({ dynamic: true })
-        ).setDescription(`Solicitação de parceria enviada às: **${horas}**`)
-      );
+        `${message.author}, caso queria enviar um pedido de parceria basta digitar: **\`CONFIRMAR\`**.\n\n> Caso queira cancelar o pedido use **\`CANCELAR\`**`
+      )
+      .then(async (msg) => {
+        let collector = msg.channel.createMessageCollector(
+          (m) => m.author.id === message.author.id,
+          { max: 1, time: 600000 }
+        );
+
+        collector.on("collect", async (collected) => {
+          if (
+            ["cancelar", "cancel"].includes(collected.content.toLowerCase())
+          ) {
+            message.channel.send(
+              `${message.author}, ação cancelada com sucesso.`
+            );
+
+            return collector.stop();
+          }
+
+          if (["confirmar"].includes(collected.content.toLowerCase())) {
+            message.quote(
+              `${message.author}, pedido de parceria enviado com sucesso!`
+            );
+            client.channels.cache
+              .get("751976777303195650")
+              .send(
+                EMBED.setAuthor(
+                  `Novo pedido de Parceria dê: ${message.author.tag}`,
+                  message.author.displayAvatarURL({ dynamic: true })
+                ).setDescription(
+                  `Solicitação de parceria enviada às: **${horas}**`
+                )
+              );
+          }
+        });
+      });
   });
 };
 exports.help = {
@@ -44,5 +55,5 @@ exports.help = {
   aliases: ["partner"],
   category: "Utils",
   description: "Use este comando para requisitar um pedido de parceria",
-  usage: "parceria"
+  usage: "parceria",
 };

@@ -7,7 +7,15 @@ exports.run = async (client, message, args) => {
       return message.channel.send(
         `${message.author}, só Staff pode usar esse comando bobinho(a).`
       );
-
+      await Guild.findOneAndUpdate(
+        { _id: message.guild.id },
+        {
+          $set: {
+            "addBot.lastUser": "null",
+            "addBot.time": Date.now() - 300000,
+          },
+        }
+      );
     let USER = message.guild.member(
       client.users.cache.get(args[0]) || message.mentions.members.first()
     );

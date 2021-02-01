@@ -31,17 +31,17 @@ exports.run = async (client, message, args) => {
         );
       if (
         !args[0] ||
-        !server.cmd.find((x) => x.name == args[0].toLowerCase())
+        !server.cmd.find((x) => x.name.toLowerCase() == args[0].toLowerCase())
       ) {
         return message.quote(message.author, COMANDOS);
       }
 
-      if (!server.cmd.find((x) => x.name == args[0].toLowerCase()).verify) {
+      if (!server.cmd.find((x) => x.name.toLowerCase() == args[0].toLowerCase()).verify) {
         return message.quote(
           `${message.author}, este comando ainda não foi verificado, por favor aguarde até que ele seja verificado para pegar o código.`
         );
       } else {
-        const cmd = server.cmd.find((x) => x.name == args[0].toLowerCase());
+        const cmd = server.cmd.find((x) => x.name.toLowerCase() == args[0].toLowerCase());
         let author = await client.users.fetch(cmd.author);
 
         const CMD = new Discord.MessageEmbed()

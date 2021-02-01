@@ -73,6 +73,24 @@ exports.run = async (client, message, args) => {
               );
             });
         }
+        const bot = await client.users.fetch(c.content);
+        if (!bot.bot) {
+          return message.author
+            .send(
+              `O ID inserido não pertence à um Bot, use o comando novamente.`
+            )
+            .then(async (x) => {
+              await Guild.findOneAndUpdate(
+                { _id: message.guild.id },
+                {
+                  $set: {
+                    "addBot.lastUser": "null",
+                    "addBot.time": Date.now() - 300000,
+                  },
+                }
+              );
+            });
+        }
         idBOT = c.content;
         await message.author.send(
           "> Qual Prefixo do Bot?\n> Tempo de Resposta:`1 minuto`"
@@ -153,7 +171,7 @@ exports.run = async (client, message, args) => {
               client.channels.cache
                 .get("791053992276393994")
                 .send(
-                  `<:idle:687577177943965696> ${message.author} enviou o bot **\`${f.username}\`** para avaliação.`
+                  `<:idle:687577177943965696> ${message.author} enviou o bot **\`${f.username}\`** para avaliação. <@&805777839278391296>`
                 );
             });
           });

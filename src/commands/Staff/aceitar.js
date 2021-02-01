@@ -31,18 +31,18 @@ exports.run = async (client, message, args) => {
           `${message.author}, você verificou com sucesso o comando **\`${args[1]}\`**.`
         );
         client.channels.cache
-          .get("791053992276393994")
+          .get("799636802364637194")
           .send(
             `<:online2:687577310278320142> o comando **\`${args[1]}\`** foi aceito com sucesso.`
           );
 
-        let verify = [server.cmd.find((x) => x.name == args[1].toLowerCase())];
+        let verify = [server.cmd.find((x) => x.name.toLowerCase() == args[1].toLowerCase())];
 
         await Guild.findOneAndUpdate(
           { _id: message.guild.id },
           {
             $pull: {
-              cmd: server.cmd.find((x) => x.name == args[1].toLowerCase()),
+              cmd: server.cmd.find((x) => x.name.toLowerCase() == args[1].toLowerCase()),
             },
           }
         );

@@ -6,37 +6,9 @@ const GetMention = (id) => new RegExp(`^<@!?${id}>( |)$`);
 
 module.exports = async (client, message) => {
   try {
-    User.findOne({ _id: message.author.id }, async function (err, user) {
-      Guild.findOne({ _id: message.guild.id }, async function (err, server) {
+    User.findOne({ _id: message.author.id }, async  (err, user) => {
+      Guild.findOne({ _id: message.guild.id }, async  (err, server) => {
         if (message.author.bot == true) return;
-
-        if (!user.help) {
-          if (
-            message.content.includes("enviar") ||
-            message.content.includes("bot") ||
-            message.content.includes("enviar um bot") ||
-            message.content.includes("mandar um bot") ||
-            message.content.includes("como mando meu bot")
-          ) {
-            message.channel.startTyping();
-            setTimeout(async (f) => {
-              message.channel.send(
-                `${message.author}, para enviar um bot para o servidor use: **${server.prefix}addbot**`
-              );
-              await User.findOneAndUpdate(
-                { _id: message.author.id },
-                { $set: { help: true } }
-              );
-              message.channel.stopTyping();
-            }, 2000);
-            setInterval(async (x) => {
-              await User.findOneAndUpdate(
-                { _id: message.author.id },
-                { $set: { help: false } }
-              );
-            }, 60000 * 2);
-          }
-        }
 
         if (user) {
           if (server) {

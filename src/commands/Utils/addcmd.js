@@ -101,12 +101,12 @@ exports.run = async (client, message, args) => {
                         `${message.author}, ok, seu comando **${args[0]}** foi enviado para avaliação.`
                       );
                       client.channels.cache
-                        .get("799636802364637194")
+                        .get("808364545444675625")
                         .send(
-                          `<:idle:687577177943965696> ${message.author} enviou o comando **\`${args[0]}\`** para avaliação.`
+                          `<:idle:808350287806988348> ${message.author} enviou o comando **\`${args[0]}\`** para avaliação.`
                         );
                       client.channels.cache
-                        .get("791055688796864522")
+                        .get("808364546535850065")
                         .send(CmdAdd);
                     })
                     .catch(console.error);

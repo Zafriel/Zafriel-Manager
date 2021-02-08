@@ -10,12 +10,13 @@ let userSchema = new Schema({
     acceptBy: { type: String, default: "null" },
     votes: { type: Number, default: 0 },
     acceptIn: { type: Number, default: 0 },
+    author: { type: String, default: "null" },
   },
   help: { type: Boolean, default: false },
   ticket: {
     have: { type: Boolean, default: false },
     channel: { type: String, default: "null" },
-    created: {type: String, default: "null"}
+    created: { type: String, default: "null" },
   },
 });
 

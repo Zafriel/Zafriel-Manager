@@ -14,7 +14,6 @@ module.exports = async (client, raw) => {
 
       if (raw.d.message_id != server.ticket.msg) return;
 
-
       if (raw.t === "MESSAGE_REACTION_ADD") {
         if (raw.d.emoji.name === "✅") {
           if (user.ticket.have)

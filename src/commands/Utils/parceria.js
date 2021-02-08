@@ -36,7 +36,7 @@ exports.run = async (client, message, args) => {
               `${message.author}, pedido de parceria enviado com sucesso!`
             );
             client.channels.cache
-              .get("751976777303195650")
+              .get("808364547625844766")
               .send(
                 EMBED.setAuthor(
                   `Novo pedido de Parceria dê: ${message.author.tag}`,

@@ -8,10 +8,10 @@ exports.run = async (client, message, args) => {
   moment.locale("pt-BR");
   Guild.findOne({ _id: message.guild.id }, async function (err, server) {
     User.findOne({ _id: message.author.id }, async function (err, user) {
-      if (user.addBot.haveSoli)
-        return message.channel.send(
-          `${message.author}, você já fez uma solicitação de Bot, você deve aguardar até ela ser aceita/recusada para enviar outra.`
-        );
+       if (user.addBot.haveSoli)
+         return message.channel.send(
+           `${message.author}, você já fez uma solicitação de Bot, você deve aguardar até ela ser aceita/recusada para enviar outra.`
+         );
 
       let cooldown = 300000;
       let time = server.addBot.time;
@@ -167,11 +167,11 @@ exports.run = async (client, message, args) => {
               message.author.send(
                 `${message.author}, seu bot foi enviado com sucesso, aguarde até que algum Staff o aceite.`
               );
-              client.channels.cache.get("791055688796864522").send(BotAdd);
+              client.channels.cache.get("808364546535850065").send(BotAdd);
               client.channels.cache
-                .get("791053992276393994")
+                .get("808364544363200532")
                 .send(
-                  `<:idle:687577177943965696> ${message.author} enviou o bot **\`${f.username}\`** para avaliação. <@&805777839278391296>`
+                  `<:idle:808350287806988348> ${message.author} enviou o bot **\`${f.username}\`** para avaliação. <@&${process.env.VERIFIY_ROLE}>`
                 );
             });
           });

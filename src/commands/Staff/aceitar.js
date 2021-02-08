@@ -1,5 +1,6 @@
 const Guild = require("../../database/Schemas/Guild");
 const User = require("../../database/Schemas/User");
+const Client = require("../../database/Schemas/Client");
 
 exports.run = async (client, message, args) => {
   Guild.findOne({ _id: message.guild.id }, async function (err, server) {
@@ -31,18 +32,22 @@ exports.run = async (client, message, args) => {
           `${message.author}, você verificou com sucesso o comando **\`${args[1]}\`**.`
         );
         client.channels.cache
-          .get("799636802364637194")
+          .get("808364545444675625")
           .send(
-            `<:online2:687577310278320142> o comando **\`${args[1]}\`** foi aceito com sucesso.`
+            `<:online:808350069018853416> o comando **\`${args[1]}\`** foi aceito com sucesso.`
           );
 
-        let verify = [server.cmd.find((x) => x.name.toLowerCase() == args[1].toLowerCase())];
+        let verify = [
+          server.cmd.find((x) => x.name.toLowerCase() == args[1].toLowerCase()),
+        ];
 
         await Guild.findOneAndUpdate(
           { _id: message.guild.id },
           {
             $pull: {
-              cmd: server.cmd.find((x) => x.name.toLowerCase() == args[1].toLowerCase()),
+              cmd: server.cmd.find(
+                (x) => x.name.toLowerCase() == args[1].toLowerCase()
+              ),
             },
           }
         );
@@ -81,32 +86,39 @@ exports.run = async (client, message, args) => {
         );
 
       User.findOne({ _id: USER.id }, async function (err, user) {
-        if (!user.addBot.haveSoli) {
-          return message.channel.send(
-            `${message.author}, este membro não tem uma solicitação de Bot ativa.`
-          );
-        } else {
+         if (!user.addBot.haveSoli) {
+           return message.channel.send(
+             `${message.author}, este membro não tem uma solicitação de Bot ativa.`
+           );
+         } else {
           await client.users.fetch(user.addBot.idBot).then(async (x) => {
-            client.channels.cache
-              .get("791053992276393994")
-              .send(
-                `<:online2:687577310278320142> ${USER} seu Bot **\`${x.username}\`** foi aceito pelo Staff **${message.author}**.`
-              );
-            await User.findOneAndUpdate(
-              { _id: USER.id },
+             client.channels.cache
+               .get("808364544363200532")
+               .send(
+                 `<:online:808350069018853416> ${USER} seu Bot **\`${x.username}\`** foi aceito pelo Staff **${message.author}**.`
+               );
+             await User.findOneAndUpdate(
+               { _id: USER.id },
+               {
+                 $set: {
+                   "addBot.haveSoli": true,
+                   "addBot.haveBot": true,
+                   "addBot.acceptBy": message.author.id,
+                   "addBot.acceptIn": Date.now(),
+                 },
+               }
+             );
+
+            await Client.findOneAndUpdate(
+              { _id: client.user.id },
               {
-                $set: {
-                  "addBot.haveSoli": true,
-                  "addBot.haveBot": true,
-                  "addBot.acceptBy": message.author.tag,
-                  "addBot.acceptIn": Date.now(),
-                },
+                $push: { bots: [{ id: x.id, owner: USER.id }] },
               }
             );
             message.channel.send(`${message.author}, bot aceito com sucesso!`);
             USER.roles.add(process.env.DEV_ROLE);
           });
-        }
+         }
       });
       return;
     }

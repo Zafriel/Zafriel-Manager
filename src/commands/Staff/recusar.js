@@ -19,7 +19,7 @@ exports.run = async (client, message, args) => {
             return message.channel.send(`${message.author}, você deve inserir o motivo para recusar a solicitação do usuário.`)
         } else {
             await client.users.fetch(user.addBot.idBot).then(async(x) => {
-            client.channels.cache.get("791053992276393994").send(`<:dnd:687577184092946467> ${USER} seu Bot **\`${x.username}\`** foi recusado pelo Staff **${message.author}**.\n\`\`\`diff\n- ${motivo}\`\`\``)
+            client.channels.cache.get("808364544363200532").send(`<:dnd:808350340579721257> ${USER} seu Bot **\`${x.username}\`** foi recusado pelo Staff **${message.author}**.\n\`\`\`diff\n- ${motivo}\`\`\``)
             await User.findOneAndUpdate({_id: USER.id}, {$set: { 'addBot.haveSoli': false, 'addBot.idBot': "null" }})
             message.channel.send(`${message.author}, bot recusado com sucesso!`)
           })

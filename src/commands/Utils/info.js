@@ -3,6 +3,7 @@ const moment = require("moment");
 require("moment-duration-format");
 const Guild = require("../../database/Schemas/Guild");
 const User = require("../../database/Schemas/User");
+const Client = require("../../database/Schemas/Client");
 
 exports.run = async (client, message, args) => {
   moment.locale("pt-BR");
@@ -19,18 +20,29 @@ exports.run = async (client, message, args) => {
     );
 
   Guild.findOne({ _id: message.guild.id }, async function (err, server) {
-    User.findOne({ _id: USER.id }, async function (err, user) {
+    Client.findOne({ _id: client.user.id }, async function (err, bot) {
+
+      let info;
+      if(USER.user.bot) info = bot.bots.map(x => x).find(f => f.id == USER.id).owner
+      else info = USER.id
+
+      User.findOne({ _id: info }, async function (err, user) {
+
       if (!user.addBot.haveBot)
         return message.channel.send(
           `${message.author}, este membro não possui nenhum Bot adicionado no servidor.`
         );
 
       let EMBED = new Discord.MessageEmbed()
-        .setAuthor(`Informações do Bot do usuário ${USER.user.tag}`)
+        .setAuthor(`Informações do Bot do usuário ${USER.user.bot ? client.users.cache.get(info).tag : USER.user.tag}`)
         .addFields(
           {
-            name: `Nome`,
+            name: `Nome do Bot`,
             value: `${client.users.cache.get(user.addBot.idBot).username}`,
+          },
+          {
+            name: `Dono`,
+            value: USER.user.bot ? client.users.cache.get(info).tag : USER.user.tag
           },
           {
             name: "ID do Bot",
@@ -55,6 +67,7 @@ exports.run = async (client, message, args) => {
       message.channel.send(EMBED);
     });
   });
+})
 };
 exports.help = {
   name: "info",

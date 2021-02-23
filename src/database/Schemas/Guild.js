@@ -27,7 +27,9 @@ let guildSchema = new Schema({
   },
   ticket: {
     size: { type: Number, default: 1 },
-    msg: {type: String,default: "null"}
+    msg: { type: String, default: "null" },
+    channel: { type: String, default: "null" },
+    guild: { type: String, default: "null" },
   },
 });
 

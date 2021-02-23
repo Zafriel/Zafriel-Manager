@@ -15,7 +15,7 @@ exports.run = async (client, message, args) => {
     message.mentions.users.first() || client.users.cache.get(args[0]);
 
   Guild.findOne({ _id: message.guild.id }, async (err, server) => {
-    User.findOne({ _id: USER.id }, async (err, user)  =>{
+    User.findOne({ _id: USER.id }, async (err, user) => {
       if (args[0] == "msg") {
         if (!server.staff.some((x) => x === message.author.id))
           return message.channel
@@ -33,7 +33,13 @@ exports.run = async (client, message, args) => {
         message.channel.send(TICKET).then(async (msg) => {
           await Guild.findOneAndUpdate(
             { _id: message.guild.id },
-            { $set: { "ticket.msg": msg.id } }
+            {
+              $set: {
+                "ticket.msg": msg.id,
+                "ticket.channel": message.channel.id,
+                "ticket.guild": message.guild.id,
+              },
+            }
           );
           msg.react("✅");
         });
@@ -80,12 +86,17 @@ exports.run = async (client, message, args) => {
                       `${message.author}, ocorreu um **ERROR** ao executar o comando de fechar o **TICKET**, lembre-se **STAFF** não exclua o canal manualmente...`
                     )
                     .then(async (x) => {
-                await User.findOneAndUpdate(
-                  { _id: USER1.id },
-                  { $set: { "ticket.have": false, "ticket.channel": "null" } }
-                );
-                x.delete({ timeout: 5000 })
-                    })
+                      await User.findOneAndUpdate(
+                        { _id: USER1.id },
+                        {
+                          $set: {
+                            "ticket.have": false,
+                            "ticket.channel": "null",
+                          },
+                        }
+                      );
+                      x.delete({ timeout: 5000 });
+                    });
               }
               await User.findOneAndUpdate(
                 { _id: USER1.id },
@@ -121,15 +132,19 @@ exports.run = async (client, message, args) => {
                   .send(
                     `${message.author}, ocorreu um **ERROR** ao executar o comando de fechar o **TICKET**, lembre-se **STAFF** não exclua o canal manualmente...`
                   )
-                  .then(async (x) => { 
-              await User.findOneAndUpdate(
-                { _id: message.author.id },
-                { $set: { "ticket.have": false, "ticket.channel": "null" } }
-              );
-              x.delete({ timeout: 5000 })
-              })
-            }
-          
+                  .then(async (x) => {
+                    await User.findOneAndUpdate(
+                      { _id: message.author.id },
+                      {
+                        $set: {
+                          "ticket.have": false,
+                          "ticket.channel": "null",
+                        },
+                      }
+                    );
+                    x.delete({ timeout: 5000 });
+                  });
+              }
             }
             await User.findOneAndUpdate(
               { _id: message.author.id },

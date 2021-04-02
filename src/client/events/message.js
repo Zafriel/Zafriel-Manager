@@ -21,7 +21,7 @@ module.exports = async (client, message) => {
                   message.react("❤️");
                 }
 
-                let channels = ["751976772974674030"];
+                let channels = ["751976772974674030", "820038871940071435"];
 
                 if (channels.some((x) => x === message.channel.id)) {
                   if (message.author.id == "600804786492932101") return;

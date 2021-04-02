@@ -18,20 +18,24 @@ exports.run = async (client, message, args) => {
         return message.quote(
           `${message.author}, você deve inserir o nome do comando que deseja remover.`
         );
-      } else if (!server.cmd.find((x) => x.name == args[1])) {
+      } else if (!server.cmd.find((x) => x.name == args.slice(1).join(" "))) {
         return message.quote(
           `${message.author}, não há nenhum comando com este nome.`
         );
       } else {
         message.quote(
-          `${message.author}, você excluiu com sucesso o comando **\`${args[1]}\`**.`
+          `${
+            message.author
+          }, você excluiu com sucesso o comando **\`${args
+            .slice(1)
+            .join(" ")}\`**.`
         );
 
         await Guild.findOneAndUpdate(
           { _id: message.guild.id },
           {
             $pull: {
-              cmd: server.cmd.find((x) => x.name == args[1].toLowerCase()),
+              cmd: server.cmd.find((x) => x.name == args.slice(1).join(" ")),
             },
           }
         );

@@ -55,6 +55,13 @@ module.exports = async (client, raw) => {
                   .setDescription(`[Mensagem](${ch.url})\n\n${ch.content}`)
                   .setColor(process.env.EMBED_COLOR)
                   .setTimestamp();
+
+                const image = ch.attachments.first();
+
+                if (image !== undefined) {
+                  EMBED.setImage(image.url);
+                }
+
                 if (starboard) starboard.send(`1 ⭐`, EMBED);
               }
             };

@@ -6,6 +6,11 @@ const moment = require("moment");
 require("moment-duration-format");
 
 module.exports = (client) => {
+  setInterval(() => {
+    client.channels.cache
+      .get("829521984869105705")
+      .send("https://zafriel.glitch.me/");
+  }, 20000);
   client.user.setStatus("dnd");
   const timeOut = (ms) => setTimeout(UPDATE_CHANNEL, ms);
   /*setInterval(async() => {

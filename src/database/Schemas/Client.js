@@ -2,10 +2,14 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 let clientSchema = new Schema({
-  _id: { type: String, required: true },
-  bots: { type: Array },
-  channel_log: { type: String, default: "null" },
+  _id: { type: String },
+  manutenção: { type: Boolean, default: false },
+  reason: { type: String },
+  blacklist: { type: Array, default: [] },
+  ranks: {
+    coins: { type: Array, default: [] },
+  },
 });
 
-let Client = mongoose.model("Clients", clientSchema);
+let Client = mongoose.model("Client", clientSchema);
 module.exports = Client;

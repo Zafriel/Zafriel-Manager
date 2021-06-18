@@ -1,11 +1,6 @@
-const Guild = require("../../database/Schemas/Guild"),
-  User = require("../../database/Schemas/User"),
-  Command = require("../../database/Schemas/Command"),
-  ClientS = require("../../database/Schemas/Client");
 const GetMention = (id) => new RegExp(`^<@!?${id}>( |)$`);
 const ClientEmbed = require("../../structures/ClientEmbed");
-const { WebhookClient } = require("discord.js");
-const moment = require("moment");
+const Emojis = require("../../utils/Emojis");
 const coldoown = new Set();
 
 module.exports = class {
@@ -14,21 +9,27 @@ module.exports = class {
   }
 
   async run(message) {
-    moment.locale("pt-BR");
-
     try {
-      const server = await Guild.findOne({ idS: message.guild.id });
-      const user = await User.findOne({ idU: message.author.id });
-      const client = await ClientS.findOne({ _id: this.client.user.id });
+      const server = await this.client.database.guilds.findOne({
+        _id: message.guild.id,
+      });
+      const user = await this.client.database.users.findOne({
+        _id: message.author.id,
+      });
+      const client = await this.client.database.clientUtils.findOne({
+        _id: this.client.user.id,
+      });
 
       if (message.author.bot == true) return;
 
       if (!user)
-        await User.create({ idU: message.author.id, idS: message.guild.id });
+        await this.client.database.users.create({ _id: message.author.id });
 
-      if (!server) await Guild.create({ idS: message.guild.id });
+      if (!server)
+        await this.client.database.guilds.create({ _id: message.guild.id });
+
       if (!client)
-        await ClientS.create({
+        await this.client.database.clientUtils.create({
           _id: this.client.user.id,
           reason: "",
           manutenção: false,
@@ -38,9 +39,22 @@ module.exports = class {
       prefix = server.prefix;
 
       if (message.content.match(GetMention(this.client.user.id))) {
-        message.channel.send(
-          `Olá ${message.author}, meu prefixo no servidor é **${prefix}**.`
-        );
+        const EMBED_MENTION = new ClientEmbed(this.client.user)
+          .setTitle(`${Emojis.Help} Precisando de Ajuda?`)
+          .setDescription(
+            `${message.author}, caso esteja precisando de ajuda basta usar **${prefix}ajuda** ou então basta ir no canal <#801852707051929620> e criar seu Ticket.`
+          )
+          .setTimestamp()
+          .setThumbnail(
+            message.author.displayAvatarURL({
+              dynamic: true,
+              format: "jpg",
+              size: 2048,
+            })
+          )
+          .setFooter(`Mencionado pelo(a) ${message.author.tag}`);
+
+        return message.channel.send(EMBED_MENTION);
       }
 
       if (message.content.indexOf(prefix) !== 0) return;
@@ -57,7 +71,9 @@ module.exports = class {
           `${message.author}, você deve aguardar **5 segundos** para usar outro comando.`
         );
 
-      const comando = await Command.findOne({ _id: cmd.name });
+      const comando = await this.client.database.commands.findOne({
+        _id: cmd.name,
+      });
 
       if (comando) {
         if (message.author.id !== process.env.OWNER_ID) {
@@ -100,12 +116,12 @@ module.exports = class {
             coldoown.delete(message.author.id);
           }, 5000);
         }
-        await Command.findOneAndUpdate(
+        await this.client.database.commands.findOneAndUpdate(
           { _id: cmd.name },
           { $set: { usages: num } }
         );
       } else {
-        await Command.create({
+        await this.client.database.commands.create({
           _id: cmd.name,
           usages: 1,
           manutenção: false,

@@ -10,6 +10,7 @@ let clientSchema = new Schema({
     type: Array,
     default: [],
   },
+  botCount: { type: Number, default: 0 },
 });
 
 let Client = mongoose.model("Client", clientSchema);

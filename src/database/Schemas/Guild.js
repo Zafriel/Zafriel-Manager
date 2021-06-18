@@ -10,6 +10,10 @@ let guildSchema = new Schema({
     channel: { type: String, default: "null" },
     guild: { type: String, default: "null" },
   },
+  addBot: {
+    lastUser: { type: String, default: "null" },
+    time: { type: Number, default: 0 },
+  },
 });
 
 let Guild = mongoose.model("Guilds", guildSchema);

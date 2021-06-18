@@ -3,15 +3,13 @@ const klaw = require("klaw");
 const path = require("path");
 const { promisify } = require("util");
 const readdir = promisify(require("fs").readdir);
-const Guild = require("./database/Schemas/Guild");
-const Files = require("./utils/Files");
-const c = require("colors");
 class Main extends Client {
   constructor(options) {
     super(options);
     this.commands = new Collection();
     this.aliases = new Collection();
     this.database = new Collection();
+    this.botCount = 0;
   }
 
   login(token) {

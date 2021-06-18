@@ -19,7 +19,7 @@ module.exports = class Shards extends Command {
     this.guildOnly = true;
   }
 
-  async run(message, args, prefix, author) {
+  async run(channel) {
     table.setHeading("SID", "UpTime", "Ping", "Usage", "Guilds", "Users");
 
     table.setAlign(0, AsciiTable.CENTER);
@@ -65,7 +65,7 @@ module.exports = class Shards extends Command {
       botUsers.toLocaleString("pt-BR")
     );
 
-    message.channel.send(`\`\`\`prolog\n${table.toString()}\`\`\``);
+    channel.send(`\`\`\`prolog\n${table.toString()}\`\`\``);
 
     table.clearRows();
   }

@@ -2,6 +2,7 @@ const GetMention = (id) => new RegExp(`^<@!?${id}>( |)$`);
 const ClientEmbed = require("../../structures/ClientEmbed");
 const Emojis = require("../../utils/Emojis");
 const coldoown = new Set();
+const c = require("colors");
 
 module.exports = class {
   constructor(client) {
@@ -94,19 +95,7 @@ module.exports = class {
           );
         }
 
-        const cb = server.cmdblock;
-
-        if (cb.status) {
-          if (!cb.cmds.some((x) => x === cmd.name)) {
-            if (!cb.channels.some((x) => x === message.channel.id)) {
-              if (!message.member.hasPermission("MANAGE_MESSAGES")) {
-                return message.channel.send(cb.msg);
-              }
-            }
-          }
-        }
-
-        cmd.run(message, args, prefix, author, language);
+        cmd.run(message, args, prefix, author);
         var num = comando.usages;
         num = num + 1;
 
@@ -127,7 +116,9 @@ module.exports = class {
           manutenção: false,
         });
         console.log(
-          `O comando ${cmd.name} teve seu documento criado com sucesso.`
+          c.cyan(
+            `[Novo Comando] - O Comando: ( ${cmd.name} ) teve o seu Documento Criado com Sucesso.`
+          )
         );
       }
     } catch (err) {

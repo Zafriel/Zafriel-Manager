@@ -19,5 +19,7 @@ module.exports = class Test extends Command {
   async run( message, args, prefix, author) {
     if (message.author.id !== "600804786492932101") return;
 
+    message.channel.send("a")
+
   }
 };

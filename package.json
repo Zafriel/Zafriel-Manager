@@ -2,7 +2,7 @@
   "name": "tutorial",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "ClientSharding.js",
   "dependencies": {
     "ascii-table": "0.0.9",
     "canvas": "^2.7.0",

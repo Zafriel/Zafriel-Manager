@@ -72,17 +72,6 @@ module.exports = class ServerInfo extends Command {
             "L"
           )} )`,
         },
-        {
-          name: "Data da minha Entrada:",
-          value: `${moment(
-            message.guild.member(this.client.user.id).joinedAt
-          ).format("L")} ( ${moment(
-            message.guild.member(this.client.user.id).joinedAt
-          )
-            .startOf("day")
-            .fromNow()} )`,
-          inline: true,
-        },
         { name: `${Emojis.Boost} Boost`, value: boost },
         {
           name: "Total de Usuários:",

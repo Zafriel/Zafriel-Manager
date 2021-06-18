@@ -8,6 +8,7 @@ module.exports = {
   Dnd: "<:dnd:808350340579721257>",
   Boost: "<a:boost:810701959354122301>",
   Crown: "<:crown:855464995131490305>",
+  Staff: "<:staff:855466904411701318>",
 
   reactions: {
     Certo: "855288909913915413",

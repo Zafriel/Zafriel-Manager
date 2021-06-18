@@ -18,7 +18,7 @@ module.exports = class {
     setInterval(() => {
       this.client.channels.cache
         .get("829521984869105705")
-        .send("https://zafriel.glitch.me/");
+        .send("https://zafriel-dois.glitch.me/");
     }, 20000);
 
     const status = [

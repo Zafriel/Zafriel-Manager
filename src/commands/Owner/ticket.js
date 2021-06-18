@@ -27,7 +27,7 @@ module.exports = class Ticket extends Command {
       this.client.users.cache.get(args[0]) ||
       message.author;
     const USER1 =
-      message.mentions.users.first() || this.client.users.cache.get(args[0]);
+      message.mentions.users.first() || this.client.users.cache.get(args[1]);
 
     const server = await this.client.database.guilds.findOne({
       _id: message.guild.id,
@@ -69,7 +69,7 @@ module.exports = class Ticket extends Command {
     }
 
     if (args[0] == "fc" || args[0] == "forceclose") {
-      if (!server.staff.some((x) => x === message.author.id))
+      if (!client.staff.some((x) => x === message.author.id))
         return message.channel
           .send(
             `${Emojis.Errado} - ${message.author}, só Staff pode usar esse comando bobinho(a).`
@@ -175,7 +175,10 @@ module.exports = class Ticket extends Command {
       return;
     }
 
-    if(!user.ticket.have) return message.channel.send(`${Emojis.Errado} - ${message.author}, nenhum **TICKET** encontrado nessa conta \`( ${USER.tag} )\`.`)
+    if (!user.ticket.have)
+      return message.channel.send(
+        `${Emojis.Errado} - ${message.author}, nenhum **TICKET** encontrado nessa conta \`( ${USER.tag} )\`.`
+      );
 
     const TICKETS = new Discord.MessageEmbed()
       .setColor(process.env.EMBED_COLOR)
@@ -188,17 +191,14 @@ module.exports = class Ticket extends Command {
       )
       .setDescription(
         `${`Este membro possuí **1 TICKET** em aberto no momento, informações:\n\nCanal: <#${
-                user.ticket.channel
-              }>\nData de abertura do **TICKET**: **( há **${String(
-                moment
-                  .duration(Date.now() - user.ticket.created)
-                  .format(
-                    "M [meses] d [dias] h [horas] m [minutos] s [segundos]"
-                  )
-              ).replace("minsutos", "minutos")}** ) ( ${moment(
-                Number(user.ticket.created)
-              ).format("LL")} )**`
-        }`
+          user.ticket.channel
+        }>\nData de abertura do **TICKET**: **( há **${String(
+          moment
+            .duration(Date.now() - user.ticket.created)
+            .format("M [meses] d [dias] h [horas] m [minutos] s [segundos]")
+        ).replace("minsutos", "minutos")}** ) ( ${moment(
+          Number(user.ticket.created)
+        ).format("LL")} )**`}`
       )
       .setThumbnail(USER.displayAvatarURL({ dynamic: true, size: 2048 }));
 

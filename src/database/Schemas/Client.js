@@ -11,6 +11,13 @@ let clientSchema = new Schema({
     default: [],
   },
   botCount: { type: Number, default: 0 },
+  bots: [
+    {
+      owner: { type: String},
+      bot: { type: String },
+      status: { type: Boolean, default: false },
+    },
+  ],
 });
 
 let Client = mongoose.model("Client", clientSchema);

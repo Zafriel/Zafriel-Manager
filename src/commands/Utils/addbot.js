@@ -20,7 +20,23 @@ module.exports = class addBot extends Command {
   }
 
   async run(message, args, prefix, author) {
+    const doc = await this.client.database.clientUtils.findOne({
+      _id: this.client.user.id,
+    });
+
+    if (doc.bots.filter((x) => x.owner === message.author.id).length >= 3)
+      return message.channel.send(
+        `${Emojis.Errado} - ${message.author}, você atingiu o limite de 3 Bots no Servidor.`
+      );
+
     moment.locale("pt-BR");
+
+    const channels = ["855485629013819402", "751976776607203408"];
+
+    if (!channels.some((x) => x === message.channel.id))
+      return message.channel.send(
+        `${Emojis.Errado} - ${message.author}, para adicionar seu Bot vá no canal <#855485629013819402>.`
+      );
 
     const server = await this.client.database.guilds.findOne({
       _id: message.guild.id,
@@ -49,7 +65,7 @@ module.exports = class addBot extends Command {
           .replace("minsutos", "minutos")}**.`
       );
 
-    /*await this.client.database.guilds.findOneAndUpdate(
+    await this.client.database.guilds.findOneAndUpdate(
       { _id: message.guild.id },
       {
         $set: {
@@ -57,7 +73,7 @@ module.exports = class addBot extends Command {
           "addBot.time": Date.now(),
         },
       }
-    );*/
+    );
 
     const EMBED = new ClientEmbed(author).setDescription(
       `Responda as Perguntas`
@@ -287,19 +303,19 @@ module.exports = class addBot extends Command {
             );
 
             await this.client.users.fetch(idBOT).then(async (f) => {
-              /*await this.client.database.guilds.findOneAndUpdate(
-              { _id: message.guild.id },
-              {
-                $set: {
-                  "addBot.lastUser": "null",
-                  "addBot.time": Date.now() - 300000,
-                },
-              }
-            );
-            await this.client.database.users.findOneAndUpdate(
-              { _id: message.author.id },
-              { $set: { "addBot.haveSoli": true, "addBot.idBot": idBOT } }
-            );*/
+              await this.client.database.guilds.findOneAndUpdate(
+                { _id: message.guild.id },
+                {
+                  $set: {
+                    "addBot.lastUser": "null",
+                    "addBot.time": Date.now() - 300000,
+                  },
+                }
+              );
+              /*await this.client.database.users.findOneAndUpdate(
+                { _id: message.author.id },
+                { $set: { "addBot.haveSoli": true, "addBot.idBot": idBOT } }
+              );*/
 
               message.channel.send(
                 `${
@@ -327,6 +343,11 @@ module.exports = class addBot extends Command {
               this.client.channels.cache
                 .get("855482567472840764")
                 .send(`<@&${process.env.VERIFIY_ROLE}>`, EMBED_SEND);
+
+              await this.client.database.clientUtils.findOneAndUpdate(
+                { _id: this.client.user.id },
+                { $push: { bots: [{ owner: message.author.id, bot: idBOT }] } }
+              );
             });
           });
         });

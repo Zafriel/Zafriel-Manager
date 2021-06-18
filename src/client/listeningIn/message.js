@@ -10,6 +10,7 @@ module.exports = class {
   }
 
   async run(message) {
+    if (message.channel.type == "dm") return;
     try {
       const server = await this.client.database.guilds.findOne({
         _id: message.guild.id,

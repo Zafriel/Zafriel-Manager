@@ -20,6 +20,7 @@ module.exports = class Bots extends Command {
   }
 
   async run(message, args, prefix, author) {
+    moment.locale("pt-BR");
     const USER =
       message.mentions.users.first() ||
       this.client.users.cache.get(args[0]) ||
@@ -48,22 +49,30 @@ module.exports = class Bots extends Command {
     await this.VERIFY(noVerify_list, list_two);
 
     const EMBED = new ClientEmbed(author)
-      .setTitle(`Informações do seus Bots`)
+      .setTitle(
+        `Informações do seus Bots [${accepts.length + noVerify.length}/3]`
+      )
       .addFields(
         {
-          name: `${Emojis.Certo} Bots Aceitos [${accepts.length}/3]`,
+          name: `${Emojis.Certo} Bots Aceitos`,
           value:
             accepts.length <= 0
               ? "Nenhum"
               : list_one
                   .map(
                     (x) =>
-                      `> Bot: **${x.bot.tag}**\n> ID: **${x.bot.id}**\n> Aceito por: **${x.author.tag}**\n> Data que foi Aceito: **${moment(x.time).format("L")}**`
+                      `> Bot: **${x.bot.tag}**\n> ID: **${
+                        x.bot.id
+                      }**\n> Aceito por: **${
+                        x.author.tag
+                      }**\n> Data que foi Aceito: **${moment(x.time).format(
+                        "L LT"
+                      )}**`
                   )
                   .join("\n\n"),
         },
         {
-          name: `${Emojis.Process} Bots Em Verificação [${noVerify.length}/3]`,
+          name: `${Emojis.Process} Bots Em Verificação`,
           value:
             noVerify.length <= 0
               ? "Nenhum"

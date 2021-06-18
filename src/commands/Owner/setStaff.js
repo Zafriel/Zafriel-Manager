@@ -1,5 +1,4 @@
 const Command = require("../../structures/Command");
-const Utils = require("../../utils/Util");
 
 module.exports = class setStaff extends Command {
   constructor(client) {
@@ -10,7 +9,7 @@ module.exports = class setStaff extends Command {
     this.category = "Owner";
     this.description = "Comando para testar códigos";
     this.usage = "";
-    this.aliases = ["ss"];
+    this.aliases = ["ss", "setstaff"];
 
     this.enabled = true;
     this.guildOnly = true;

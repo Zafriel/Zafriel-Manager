@@ -1,8 +1,8 @@
-const moment = require("moment");
-require("moment-duration-format");
 const Command = require("../../structures/Command");
 const ClientEmbed = require("../../structures/ClientEmbed");
 const Emojis = require("../../utils/Emojis");
+const moment = require("moment");
+require("moment-duration-format");
 
 module.exports = class Bots extends Command {
   constructor(client) {
@@ -20,16 +20,16 @@ module.exports = class Bots extends Command {
   }
 
   async run(message, args, prefix, author) {
-    const doc = await this.client.database.clientUtils.findOne({
-      _id: this.client.user.id,
-    });
-
     const USER =
       message.mentions.users.first() ||
       this.client.users.cache.get(args[0]) ||
       message.author;
 
-    const bots = doc.bots.filter((x) => x.owner === USER.id);
+    const doc = await this.client.database.users.findOne({
+      _id: USER.id,
+    });
+
+    const bots = doc.bots;
     const accepts = bots.filter((x) => x.status);
     const noVerify = bots.filter((x) => !x.status);
 
@@ -38,13 +38,13 @@ module.exports = class Bots extends Command {
         `${Emojis.Errado} - ${message.author}, você não tem nenhum Bot enviado/aceito no Servidor, vá no chat <#855485629013819402> e envie um Bot.`
       );
 
-    const accept_list = accepts.map((f) => f.bot);
-    const noVerify_list = noVerify.map((f) => f.bot);
+    const accept_list = accepts.map((f) => f.idBot);
+    const noVerify_list = noVerify.map((f) => f.idBot);
 
     const list_one = [];
     const list_two = [];
 
-    await this.ACCEPT(accept_list, list_one);
+    await this.ACCEPT(accept_list, list_one, message);
     await this.VERIFY(noVerify_list, list_two);
 
     const EMBED = new ClientEmbed(author)
@@ -56,7 +56,10 @@ module.exports = class Bots extends Command {
             accepts.length <= 0
               ? "Nenhum"
               : list_one
-                  .map((x) => `> Bot: **${x.bot.tag}**\n> ID: **${x.bot.id}**`)
+                  .map(
+                    (x) =>
+                      `> Bot: **${x.bot.tag}**\n> ID: **${x.bot.id}**\n> Aceito por: **${x.author.tag}**\n> Data que foi Aceito: **${moment(x.time).format("L")}**`
+                  )
                   .join("\n\n"),
         },
         {
@@ -72,9 +75,19 @@ module.exports = class Bots extends Command {
 
     message.channel.send(EMBED);
   }
-  async ACCEPT(accept_list, list_one) {
+  async ACCEPT(accept_list, list_one, message) {
     for (const list of accept_list) {
-      list_one.push({ bot: await this.client.users.fetch(list) });
+      const doc = await this.client.database.users.findOne({
+        _id: message.author.id,
+      });
+
+      const bot = doc.bots.filter((x) => x.idBot === list)[0];
+
+      list_one.push({
+        bot: await this.client.users.fetch(list),
+        author: await this.client.users.fetch(bot.acceptBy),
+        time: bot.acceptIn,
+      });
     }
   }
   async VERIFY(noVerify_list, list_two) {

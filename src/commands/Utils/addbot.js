@@ -47,10 +47,10 @@ module.exports = class addBot extends Command {
 
     message.delete().catch((O_o) => {});
 
-    if (user.addBot.haveSoli)
+    /*if (user.addBot.haveSoli)
       return message.channel.send(
         `${message.author}, você já fez uma solicitação de Bot, você deve aguardar até ela ser aceita/recusada para enviar outra.`
-      );
+      );*/
 
     let cooldown = 300000;
     let time = server.addBot.time;
@@ -312,10 +312,23 @@ module.exports = class addBot extends Command {
                   },
                 }
               );
-              /*await this.client.database.users.findOneAndUpdate(
+
+              await this.client.database.users.findOneAndUpdate(
                 { _id: message.author.id },
-                { $set: { "addBot.haveSoli": true, "addBot.idBot": idBOT } }
-              );*/
+                {
+                  $push: {
+                    bots: [
+                      {
+                        idBot: idBOT,
+                        status: false,
+                        author: message.author.id,
+                        acceptIn: 0,
+                        acceptBy: "null",
+                      },
+                    ],
+                  },
+                }
+              );
 
               message.channel.send(
                 `${

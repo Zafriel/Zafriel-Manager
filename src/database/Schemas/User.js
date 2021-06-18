@@ -8,15 +8,15 @@ let userSchema = new Schema({
     channel: { type: String, default: "null" },
     created: { type: String, default: "null" },
   },
-  addBot: {
-    haveSoli: { type: Boolean, default: false },
-    idBot: { type: String, default: "null" },
-    haveBot: { type: Boolean, default: false },
-    acceptBy: { type: String, default: "null" },
-    votes: { type: Number, default: 0 },
-    acceptIn: { type: Number, default: 0 },
-    author: { type: String, default: "null" },
-  },
+  bots: [
+    {
+      idBot: { type: String, default: "null" },
+      acceptBy: { type: String, default: "null" },
+      acceptIn: { type: Number, default: 0 },
+      author: { type: String, default: "null" },
+      status: { type: Boolean, default: false },
+    },
+  ],
 });
 
 const User = mongoose.model("Users", userSchema);

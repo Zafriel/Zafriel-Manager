@@ -76,7 +76,7 @@ module.exports = class Verify extends Command {
 
     message.channel
       .send(
-        `${message.author}, deseja aceitar o Bot do(a) **${target.tag}** membro(a): **${USER}**?`
+        `${message.author}, o que você deseja fazer com o Bot **${target.tag}** do(a) membro(a) **${USER}**?\n\n> ${Emojis.Certo} Aceita o Bot\n> ${Emojis.Errado} Recusa o Bot`
       )
       .then(async (msg) => {
         for (let emoji of [Emojis.reactions.Certo, Emojis.reactions.Errado])
@@ -113,6 +113,23 @@ module.exports = class Verify extends Command {
 
                   message.channel.send(
                     `${Emojis.Certo} - ${message.author}, você aceitou o Bot ( **${target.tag}** ) do membro ${USER} com sucesso.`
+                  );
+
+                  this.client.channels.cache.get("855482567472840764").send(
+                    USER,
+                    new ClientEmbed(target)
+                      .setDescription(
+                        `${USER}, seu bot foi aceito pelo Staff ${message.author}.\n\n> ${Emojis.Reason} **${reason}**`
+                      )
+                      .setColor("#00ff1d")
+                      .setTimestamp()
+                      .setThumbnail(
+                        target.displayAvatarURL({ format: "jpg", size: 2048 })
+                      )
+                      .setAuthor(
+                        `Bot: ${target.tag}`,
+                        target.displayAvatarURL()
+                      )
                   );
 
                   this.client.users.cache
@@ -204,32 +221,80 @@ module.exports = class Verify extends Command {
             }
 
             if (collected.first().emoji.id === Emojis.reactions.Errado) {
-              message.channel.send(
-                `${Emojis.Errado} - ${message.author}, você recusou o Bot ( **${target.tag}** ) do membro ${USER} com sucesso.`
+              const sendMessage = await message.channel.send(
+                `${Emojis.Reason} - ${message.author}, agora insira o motivo de ter recusado o Bot do Membro, caso não queira inserir nenhum motivo escreva **NADA** na resposta.`
               );
 
-              await this.client.database.users.findOneAndUpdate(
-                { _id: USER.id },
-                {
-                  $pull: {
-                    bots: doc1.bots.find(
-                      (x) => x.idBot === String(find[id - 1].bot)
-                    ),
-                  },
-                }
-              );
-              await this.client.database.clientUtils.findOneAndUpdate(
-                { _id: this.client.user.id },
-                {
-                  $pull: {
-                    bots: doc.bots.find(
-                      (x) => x.bot === String(find[id - 1].bot)
-                    ),
-                  },
-                }
-              );
+              await msg.delete();
 
-              msg.delete();
+              const collector = sendMessage.channel
+                .createMessageCollector(
+                  (m) => m.author.id === message.author.id,
+                  { time: 120000 }
+                )
+
+                .on("collect", async ({ content }) => {
+                  let reason = content;
+
+                  if (content.toLowerCase() === "nada")
+                    reason = "Nenhum Motivo";
+
+                  this.client.channels.cache.get("855482567472840764").send(
+                    USER,
+                    new ClientEmbed(target)
+                      .setDescription(
+                        `${USER}, seu bot foi recusado pelo Staff ${message.author}.\n\n> ${Emojis.Reason} **${reason}**`
+                      )
+                      .setColor("#f50000")
+                      .setTimestamp()
+                      .setThumbnail(
+                        target.displayAvatarURL({ format: "jpg", size: 2048 })
+                      )
+                      .setAuthor(
+                        `Bot: ${target.tag}`,
+                        target.displayAvatarURL()
+                      )
+                  );
+
+                  this.client.users.cache
+                    .get(USER.id)
+                    .send(
+                      `${Emojis.Errado} - ${USER}, seu Bot foi recusado, informações abaixo:\n\n> ${Emojis.User} Staff que Recusou: **${message.author.tag}** ( \`${message.author.id}\` )\n> ${Emojis.Reason} Motivo: **${reason}**`
+                    )
+                    .catch((x) =>
+                      message.channel
+                        .send(
+                          `${Emojis.Errado} - ${message.author}, a **DM** do membro está fechada, portanto não foi possível enviar a mensagem para ele.`
+                        )
+                        .then((x) => x.delete({ timeout: 5000 }))
+                    );
+
+                  message.channel.send(
+                    `${Emojis.Errado} - ${message.author}, você recusou o Bot ( **${target.tag}** ) do membro ${USER} com sucesso.`
+                  );
+
+                  await this.client.database.users.findOneAndUpdate(
+                    { _id: USER.id },
+                    {
+                      $pull: {
+                        bots: doc1.bots.find(
+                          (x) => x.idBot === String(find[id - 1].bot)
+                        ),
+                      },
+                    }
+                  );
+                  await this.client.database.clientUtils.findOneAndUpdate(
+                    { _id: this.client.user.id },
+                    {
+                      $pull: {
+                        bots: doc.bots.find(
+                          (x) => x.bot === String(find[id - 1].bot)
+                        ),
+                      },
+                    }
+                  );
+                  collector.stop();
+                });
             }
           });
       });

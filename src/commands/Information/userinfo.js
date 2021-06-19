@@ -88,7 +88,18 @@ module.exports = class UserInfo extends Command {
         USERINFO.addField(
           `${Emojis.Robot} Bots no Servidor [${bots.length}/3]`,
           list
-            .map((x) => `${x.status ? `> ${x.verified ? Emojis.Certo : ""}🟢 **${x.user.tag}** - Votos: **\`${x.votes <= 0 ? "NENHUM" : x.votes.toLocaleString()}\`**` : `> 🟡 **${x.user.tag}** `}`)
+            .map(
+              (x) =>
+                `${
+                  x.status
+                    ? `> ${x.verified ? Emojis.Certo : ""}🟢 **${
+                        x.user.tag
+                      }** - Votos: **\`${
+                        x.votes <= 0 ? "NENHUM" : x.votes.toLocaleString()
+                      }\`**`
+                    : `> 🟡 **${x.user.tag}** `
+                }`
+            )
             .join("\n")
         );
     }

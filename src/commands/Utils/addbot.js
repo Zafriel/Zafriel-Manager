@@ -95,6 +95,8 @@ module.exports = class addBot extends Command {
             `${Emojis.Certo} - ${message.author}, pedido cancelado com sucesso.`
           );
           y.delete();
+          c.delete();
+
           return await this.client.database.guilds.findOneAndUpdate(
             { _id: message.guild.id },
             {
@@ -120,6 +122,40 @@ module.exports = class addBot extends Command {
               );
               x.delete({ timeout: 5000 });
               y.delete();
+              question1.delete();
+              c.delete();
+            });
+        }
+
+        if (doc.bots.find((x) => x.bot === c.content)) {
+          const find = doc.bots.find((x) => x.bot === c.content);
+
+          return message.channel
+            .send(
+              `${Emojis.Errado} - ${
+                message.author
+              }, este Bot já está no servidor, informações:\n\n> ${
+                Emojis.User
+              } Quem enviou: **${await this.client.users
+                .fetch(find.owner)
+                .then(
+                  (x) => x.tag
+                )}**\n\nCaso você seja o Dono desse Bot e outra pessoa enviou ele no seu lugar sem sua autorização contate algum Staff.`
+            )
+            .then(async (x) => {
+              await this.client.database.guilds.findOneAndUpdate(
+                { _id: message.guild.id },
+                {
+                  $set: {
+                    "addBot.lastUser": "null",
+                    "addBot.time": Date.now() - 300000,
+                  },
+                }
+              );
+              x.delete({ timeout: 10000 });
+              y.delete();
+              question1.delete();
+              c.delete();
             });
         }
         const bot = await this.client.users.fetch(c.content);
@@ -167,6 +203,10 @@ module.exports = class addBot extends Command {
 
         await MSG.edit(
           new ClientEmbed(author)
+            .setAuthor(
+              message.author.tag,
+              message.author.displayAvatarURL({ dynamic: true })
+            )
             .setDescription(
               `・ID do Bot: **${idBOT}**\n・Nome do Bot: **${bot.username}**\n・Criado há: **${created}**`
             )
@@ -205,6 +245,10 @@ module.exports = class addBot extends Command {
 
           await MSG.edit(
             new ClientEmbed(author)
+              .setAuthor(
+                message.author.tag,
+                message.author.displayAvatarURL({ dynamic: true })
+              )
               .setDescription(
                 `・ID do Bot: **${idBOT}**\n・Nome do Bot: **${bot.username}**\n・Criado há: **${created}**\n・Prefixo do Bot: **${prefixoBOT}**`
               )
@@ -243,6 +287,10 @@ module.exports = class addBot extends Command {
 
             await MSG.edit(
               new ClientEmbed(author)
+                .setAuthor(
+                  message.author.tag,
+                  message.author.displayAvatarURL({ dynamic: true })
+                )
                 .setDescription(
                   `・ID do Bot: **${idBOT}**\n・Nome do Bot: **${bot.username}**\n・Criado há: **${created}**\n・Prefixo do Bot: **${prefixoBOT}**\n・Linguagem do Bot: **${linguagemBOT}**`
                 )

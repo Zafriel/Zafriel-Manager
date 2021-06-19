@@ -14,7 +14,7 @@ module.exports = class {
       _id: this.client.user.id,
     });
 
-    if (!doc.bots.length) return;
+    if (!doc.bots.length || String(doc) === "null") return;
 
     const list = doc.bots.map((x) => x.idBot);
 

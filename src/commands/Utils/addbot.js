@@ -47,10 +47,10 @@ module.exports = class addBot extends Command {
 
     message.delete().catch((O_o) => {});
 
-    /*if (user.addBot.haveSoli)
+    if (user.bots.length >= 3)
       return message.channel.send(
-        `${message.author}, você já fez uma solicitação de Bot, você deve aguardar até ela ser aceita/recusada para enviar outra.`
-      );*/
+        `${Emojis.Errado} - ${message.author}, você já tem o limite de Bots no Servidor/em verificação ( **3 Bots** ).`
+      );
 
     let cooldown = 300000;
     let time = server.addBot.time;

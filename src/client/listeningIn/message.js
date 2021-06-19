@@ -70,7 +70,7 @@ module.exports = class {
 
       if (!cmd) return;
 
-
+      //if (message.author.id != process.env.OWNER_ID) return;
 
       if (coldoown.has(message.author.id))
         return message.channel.send(

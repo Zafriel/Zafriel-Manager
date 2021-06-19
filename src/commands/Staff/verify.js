@@ -93,77 +93,114 @@ module.exports = class Verify extends Command {
           )
           .then(async (collected) => {
             if (collected.first().emoji.id === Emojis.reactions.Certo) {
-              message.channel.send(
-                `${Emojis.Certo} - ${message.author}, você aceitou o Bot ( **${target.tag}** ) do membro ${USER} com sucesso.`
+              const sendMessage = await message.channel.send(
+                `${Emojis.Reason} - ${message.author}, agora insira o motivo de ter aceito o Bot do Membro, caso não queira inserir nenhum motivo escreva **NADA** na resposta.`
               );
 
-              let verify = [
-                doc1.bots.find((x) => x.idBot === String(find[id - 1].bot)),
-              ];
+              await msg.delete();
 
-              let verify2 = [
-                doc.bots.find((x) => x.bot === String(find[id - 1].bot)),
-              ];
+              const collector = sendMessage.channel
+                .createMessageCollector(
+                  (m) => m.author.id === message.author.id,
+                  { time: 120000 }
+                )
 
-              await this.client.database.users.findOneAndUpdate(
-                { _id: USER.id },
-                {
-                  $pull: {
-                    bots: doc1.bots.find(
-                      (x) => x.idBot === String(find[id - 1].bot)
-                    ),
-                  },
-                }
-              );
+                .on("collect", async ({ content }) => {
+                  let reason = content;
 
-              await this.client.database.clientUtils.findOneAndUpdate(
-                { _id: this.client.user.id },
-                {
-                  $pull: {
-                    bots: doc.bots.find(
-                      (x) => x.bot === String(find[id - 1].bot)
-                    ),
-                  },
-                }
-              );
+                  if (content.toLowerCase() === "nada")
+                    reason = "Nenhum Motivo";
 
-              verify2.map(async (z) => {
-                await this.client.database.clientUtils.findOneAndUpdate(
-                  { _id: this.client.user.id },
-                  {
-                    $push: {
-                      bots: [
+                  message.channel.send(
+                    `${Emojis.Certo} - ${message.author}, você aceitou o Bot ( **${target.tag}** ) do membro ${USER} com sucesso.`
+                  );
+
+                  this.client.users.cache
+                    .get(USER.id)
+                    .send(
+                      `${Emojis.Certo} - ${USER}, seu Bot foi aceito, informações abaixo:\n\n> ${Emojis.User} Staff que Aceitou: **${message.author.tag}** ( \`${message.author.id}\` )\n> ${Emojis.Reason} Motivo: **${reason}**`
+                    )
+                    .catch((x) =>
+                      message.channel
+                        .send(
+                          `${Emojis.Errado} - ${message.author}, a **DM** do membro está fechada, portanto não foi possível enviar a mensagem para ele.`
+                        )
+                        .then((x) => x.delete({ timeout: 5000 }))
+                    );
+
+                  let verify = [
+                    doc1.bots.find((x) => x.idBot === String(find[id - 1].bot)),
+                  ];
+
+                  let verify2 = [
+                    doc.bots.find((x) => x.bot === String(find[id - 1].bot)),
+                  ];
+
+                  await this.client.database.users.findOneAndUpdate(
+                    { _id: USER.id },
+                    {
+                      $pull: {
+                        bots: doc1.bots.find(
+                          (x) => x.idBot === String(find[id - 1].bot)
+                        ),
+                      },
+                    }
+                  );
+
+                  await this.client.database.clientUtils.findOneAndUpdate(
+                    { _id: this.client.user.id },
+                    {
+                      $pull: {
+                        bots: doc.bots.find(
+                          (x) => x.bot === String(find[id - 1].bot)
+                        ),
+                      },
+                    }
+                  );
+
+                  setTimeout(async () => {
+                    verify2.map(async (z) => {
+                      await this.client.database.clientUtils.findOneAndUpdate(
+                        { _id: this.client.user.id },
                         {
-                          bot: z.bot,
-                          owner: USER.id,
-                          status: true,
-                        },
-                      ],
-                    },
-                  }
-                );
-              });
+                          $push: {
+                            bots: [
+                              {
+                                bot: z.bot,
+                                owner: USER.id,
+                                status: true,
+                                votes: 0,
+                                verified: false,
+                              },
+                            ],
+                          },
+                        }
+                      );
+                    });
 
-              verify.map(async (z) => {
-                await this.client.database.users.findOneAndUpdate(
-                  { _id: USER.id },
-                  {
-                    $push: {
-                      bots: [
+                    verify.map(async (z) => {
+                      await this.client.database.users.findOneAndUpdate(
+                        { _id: USER.id },
                         {
-                          idBot: z.idBot,
-                          acceptBy: message.author.id,
-                          acceptIn: Date.now(),
-                          author: USER.id,
-                          status: true,
-                        },
-                      ],
-                    },
-                  }
-                );
-              });
-
-              msg.delete();
+                          $push: {
+                            bots: [
+                              {
+                                idBot: z.idBot,
+                                acceptBy: message.author.id,
+                                acceptIn: Date.now(),
+                                author: USER.id,
+                                status: true,
+                                votes: 0,
+                                verified: false,
+                              },
+                            ],
+                          },
+                        }
+                      );
+                    });
+                  }, 2000);
+                  collector.stop();
+                });
             }
 
             if (collected.first().emoji.id === Emojis.reactions.Errado) {

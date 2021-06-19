@@ -15,6 +15,8 @@ let userSchema = new Schema({
       acceptIn: { type: Number, default: 0 },
       author: { type: String, default: "null" },
       status: { type: Boolean, default: false },
+      votes: { type: Number, default: 0 },
+      verified: { type: Boolean, default: false },
     },
   ],
 });

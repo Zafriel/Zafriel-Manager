@@ -11,6 +11,12 @@ module.exports = {
   Staff: "<:staff:855466904411701318>",
   Process: "<:process:855519143511719956>",
   Remove: "<:remove:855600827003174912>",
+  Mobile: "<:mobile:855835360856768523>",
+  Computer: "<:computer:855835361150500895>",
+  Robot: "<:ai:855835361371619359>",
+  Calendar: "<:calendar:855835938125774868>",
+  User: "<:man:855841414193217548>",
+  Reason: "<:question:855841414607798272>",
 
   reactions: {
     Certo: "855288909913915413",

@@ -11,7 +11,8 @@ module.exports = class Bots extends Command {
 
     this.name = "bots";
     this.category = "Utils";
-    this.description = "Comando para ver os Bots do Membro que estão no Servidor";
+    this.description =
+      "Comando para ver os Bots do Membro que estão no Servidor";
     this.usage = "addBot";
     this.aliases = ["bot"];
 
@@ -85,11 +86,10 @@ module.exports = class Bots extends Command {
     message.channel.send(EMBED);
   }
   async ACCEPT(accept_list, list_one, USER) {
+    const doc = await this.client.database.users.findOne({
+      _id: USER.id,
+    });
     for (const list of accept_list) {
-      const doc = await this.client.database.users.findOne({
-        _id: USER.id,
-      });
-
       const bot = doc.bots.filter((x) => x.idBot === list)[0];
 
       list_one.push({

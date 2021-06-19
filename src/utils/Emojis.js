@@ -17,6 +17,8 @@ module.exports = {
   Calendar: "<:calendar:855835938125774868>",
   User: "<:man:855841414193217548>",
   Reason: "<:question:855841414607798272>",
+  Pass: "<:origami_zafriel:819650684990652436>",
+  Vote: "<:voting:855900356763451422>",
 
   reactions: {
     Certo: "855288909913915413",

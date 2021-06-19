@@ -7,7 +7,7 @@ module.exports = class setStaff extends Command {
 
     this.name = "setStaff";
     this.category = "Owner";
-    this.description = "Comando para testar códigos";
+    this.description = "Comando para adicionar os Staffs do Bot.";
     this.usage = "";
     this.aliases = ["ss", "setstaff"];
 

@@ -7,7 +7,8 @@ module.exports = class addVerify extends Command {
 
     this.name = "addVerify";
     this.category = "Owner";
-    this.description = "Comando para testar códigos";
+    this.description =
+      "Comando para adicionar novos verificadores no Servidor.";
     this.usage = "";
     this.aliases = ["add-v", "av", "setverify", "sv", "set-v"];
 

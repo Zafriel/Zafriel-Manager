@@ -7,6 +7,10 @@ module.exports = class {
   }
 
   async run(member) {
+    const guild = this.client.guilds.cache.get(member.guild.id);
+
+    if (guild.id != "601848654202011677") return;
+
     const user = member.user;
 
     const doc = await this.client.database.users.findOne({ _id: user.id });

@@ -392,9 +392,7 @@ module.exports = class addBot extends Command {
                 .setDescription(
                   `${message.author} seu Bot ( **${
                     f.username
-                  }** ) foi enviado para verificação.\n\nPosição do mesmo na Fila: **${
-                    doc.botCount + 1
-                  }º Lugar**`
+                  }** ) foi enviado para verificação.`
                 )
                 .setTimestamp()
                 .setThumbnail(

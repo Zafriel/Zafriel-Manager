@@ -23,6 +23,8 @@ module.exports = class Verify extends Command {
       _id: this.client.user.id,
     });
 
+    if (!doc.verificadores.some((x) => x === message.author.id)) return;
+
     const USER =
       message.mentions.users.first() || this.client.users.cache.get(args[0]);
 
@@ -30,17 +32,17 @@ module.exports = class Verify extends Command {
     const list = [];
     const id = parseInt(args[1]);
 
+    if (!USER)
+      return message.channel.send(
+        `${Emojis.Errado} - ${message.author}, mencione/insira o ID do membro que você deseja aceitar o Bot.`
+      );
+
     const bot = bots
       .filter((x) => x.owner === USER.id && !x.status)
       .map((x) => x.bot);
     const find = bots.filter((x) => x.owner === USER.id);
 
     await this.PUSH(list, bot);
-
-    if (!USER)
-      return message.channel.send(
-        `${Emojis.Errado} - ${message.author}, mencione/insira o ID do membro que você deseja aceitar o Bot.`
-      );
 
     if (!bots.filter((x) => x.owner === USER.id).length)
       return message.channel.send(
@@ -137,13 +139,15 @@ module.exports = class Verify extends Command {
                     .send(
                       `${Emojis.Certo} - ${USER}, seu Bot foi aceito, informações abaixo:\n\n> ${Emojis.User} Staff que Aceitou: **${message.author.tag}** ( \`${message.author.id}\` )\n> ${Emojis.Reason} Motivo: **${reason}**`
                     )
-                    .catch((x) =>
+                    .catch(() =>
                       message.channel
                         .send(
                           `${Emojis.Errado} - ${message.author}, a **DM** do membro está fechada, portanto não foi possível enviar a mensagem para ele.`
                         )
                         .then((x) => x.delete({ timeout: 5000 }))
                     );
+
+                  message.guild.member(USER.id).roles.add("855913108139933747");
 
                   let verify = [
                     doc1.bots.find((x) => x.idBot === String(find[id - 1].bot)),

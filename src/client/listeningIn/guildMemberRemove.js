@@ -1,0 +1,55 @@
+const ClientEmbed = require("../../structures/ClientEmbed");
+const Emojis = require("../../utils/Emojis");
+
+module.exports = class {
+  constructor(client) {
+    this.client = client;
+  }
+
+  async run(member) {
+    const user = member.user;
+
+    const doc = await this.client.database.users.findOne({ _id: user.id });
+    const doc1 = await this.client.database.clientUtils.findOne({
+      _id: this.client.user.id,
+    });
+
+    if (!doc.bots.length) return;
+
+    const list = doc.bots.map((x) => x.idBot);
+
+    await this.RemoveBots(list, user);
+  }
+  async RemoveBots(list, user) {
+    const server = await this.client.guilds.fetch(process.env.GUILD_ID);
+    const bot_list = [];
+
+    for (const bots of list) {
+      const member = server.members.cache.get(bots);
+
+      bot_list.push({
+        user: await this.client.users.fetch(bots).then((user) => {
+          return user;
+        }),
+      });
+
+      member.kick("Dono do Bot Saiu do Servidor");
+    }
+
+    const EMBED = new ClientEmbed(this.client.user)
+      .setThumbnail(user.displayAvatarURL({ format: "jpg", size: 2048 }))
+      .setDescription(
+        `${Emojis.Remove} O Membro **${
+          user.tag
+        }** saiu do servidor e possuia **${
+          bot_list.length
+        } Bots** no servidor, portanto os mesmo foram removidos!\n\nLista:\n${`**${bot_list
+          .map((x) => `> ${x.user.tag}`)
+          .join("\n")}**`}`
+      )
+      .setFooter(`Bots removidos com Sucesso!`)
+      .setTimestamp();
+
+    this.client.channels.cache.get("751976776607203408").send(EMBED);
+  }
+};

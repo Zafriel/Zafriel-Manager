@@ -1,5 +1,3 @@
-const moment = require("moment");
-require("moment-duration-format");
 const Command = require("../../structures/Command");
 const ClientEmbed = require("../../structures/ClientEmbed");
 const Emojis = require("../../utils/Emojis");
@@ -10,8 +8,8 @@ module.exports = class Verify extends Command {
     this.client = client;
 
     this.name = "verify";
-    this.category = "Information";
-    this.description = "É isso";
+    this.category = "Staff";
+    this.description = "Comando para recusar/aceitar Bots enviados pelos Membros.";
     this.usage = "addBot";
     this.aliases = ["verificar"];
 

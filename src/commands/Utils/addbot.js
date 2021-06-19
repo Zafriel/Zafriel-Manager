@@ -10,8 +10,8 @@ module.exports = class addBot extends Command {
     this.client = client;
 
     this.name = "addbot";
-    this.category = "Information";
-    this.description = "É isso";
+    this.category = "Utils";
+    this.description = "Comando para enviar seu Bot para verificação.";
     this.usage = "addBot";
     this.aliases = ["addBot"];
 

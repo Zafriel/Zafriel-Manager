@@ -10,6 +10,7 @@ module.exports = {
   Crown: "<:crown:855464995131490305>",
   Staff: "<:staff:855466904411701318>",
   Process: "<:process:855519143511719956>",
+  Remove: "<:remove:855600827003174912>",
 
   reactions: {
     Certo: "855288909913915413",

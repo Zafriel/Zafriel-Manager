@@ -70,10 +70,7 @@ module.exports = class {
 
       if (!cmd) return;
 
-      if (message.author.id !== process.env.OWNER_ID)
-        return message.channel.send(
-          `${Emojis.Errado} - ${message.author}, estou em fase de desenvolvimento, em breve estarei liberado para todos.`
-        );
+
 
       if (coldoown.has(message.author.id))
         return message.channel.send(

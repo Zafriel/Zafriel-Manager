@@ -18,14 +18,24 @@ module.exports = class {
 
     const list = doc.bots.map((x) => x.idBot);
 
-    await this.RemoveBots(list, user);
+    await this.RemoveBots(list, user, doc1);
   }
-  async RemoveBots(list, user) {
+  async RemoveBots(list, user, doc1) {
     const server = await this.client.guilds.fetch(process.env.GUILD_ID);
     const bot_list = [];
 
     for (const bots of list) {
       const member = server.members.cache.get(bots);
+
+      await this.client.database.users.findOneAndUpdate(
+        { _id: user.id },
+        { $set: { bots: [] } }
+      );
+
+      await this.client.database.clientUtils.findOneAndUpdate(
+        { _id: this.client.user.id },
+        { $pull: { bots: doc1.bots.find((x) => x.owner === user.id) } }
+      );
 
       bot_list.push({
         user: await this.client.users.fetch(bots).then((user) => {

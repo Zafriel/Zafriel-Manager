@@ -9,7 +9,8 @@ module.exports = class Verify extends Command {
 
     this.name = "verify";
     this.category = "Staff";
-    this.description = "Comando para recusar/aceitar Bots enviados pelos Membros.";
+    this.description =
+      "Comando para recusar/aceitar Bots enviados pelos Membros.";
     this.usage = "addBot";
     this.aliases = ["verificar"];
 

@@ -31,7 +31,16 @@ module.exports = class Vote extends Command {
       _id: message.author.id,
     });
 
-    let id = args[0];
+    let id =
+      message.mentions.users.first() || this.client.users.cache.get(args[0]);
+
+    if (!id.bot)
+      return message.channel.send(
+        `${Emojis.Errado} - ${message.author}, este membro não é um Bot.`
+      );
+
+    id = id.id;
+
     const cooldown = 2.88e7;
     const vote = doc1.lastVote;
     const time = cooldown - (Date.now() - vote);

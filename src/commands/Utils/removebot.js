@@ -12,7 +12,7 @@ module.exports = class removeBot extends Command {
     this.name = "removeBot";
     this.category = "Utils";
     this.description =
-      "Comando para ver os Bots do Membro que estão no Servidor";
+      "Comando para Remover seu Bot do Servidor caso você queira.";
     this.usage = "addBot";
     this.aliases = ["removerbot", "r-bot", "remove-b"];
 

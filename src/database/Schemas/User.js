@@ -19,6 +19,7 @@ let userSchema = new Schema({
       verified: { type: Boolean, default: false },
     },
   ],
+  hasBot: { type: Number, default: 0 },
   lastVote: { type: Number, default: 0 },
 });
 

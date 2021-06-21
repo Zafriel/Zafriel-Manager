@@ -23,8 +23,6 @@ module.exports = class Vote extends Command {
   async run(message, args, prefix, author) {
     moment.locale("pt-BR");
 
-    return;
-
     const doc = await this.client.database.clientUtils.findOne({
       _id: this.client.user.id,
     });
@@ -58,6 +56,11 @@ module.exports = class Vote extends Command {
 
     const doc2 = await this.client.database.users.findOne({ _id: info.owner });
     const user_bot = doc2.bots.filter((x) => x.idBot === id)[0];
+
+    if (!user_bot.status)
+      return message.channel.send(
+        `${Emojis.Errado} - ${message.author}, este Bot ainda não foi aceito no Servidor portanto não é possível votar nele.`
+      );
 
     message.channel
       .send(

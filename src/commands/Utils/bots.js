@@ -68,7 +68,7 @@ module.exports = class Bots extends Command {
                         x.author.tag
                       }**\n> Data que foi Aceito: **${moment(x.time).format(
                         "L LT"
-                      )}**`
+                      )}**\n> Votos: **${x.votes.toLocaleString()}**`
                   )
                   .join("\n\n"),
         },
@@ -96,6 +96,8 @@ module.exports = class Bots extends Command {
         bot: await this.client.users.fetch(list),
         author: await this.client.users.fetch(bot.acceptBy),
         time: bot.acceptIn,
+        votes: bot.votes,
+        verified: bot.verified,
       });
     }
   }

@@ -113,6 +113,13 @@ module.exports = class removeBot extends Command {
                     `${Emojis.Certo} - ${message.author}, Bot do(a) Membro(a) removido com sucesso.`
                   );
 
+                  const member = message.guild.member(find.id);
+
+                  if (member)
+                    member
+                      .kick(`Bot Removido pelo(a) ${message.author.tag}`)
+                      .catch(() => {});
+
                   USER.send(
                     `${Emojis.Robot} - ${USER}, seu Bot **${find.tag}** foi removido do Servidor pelo(a) ${message.author}`
                   ).catch(() => {});
@@ -224,6 +231,11 @@ module.exports = class removeBot extends Command {
                   message.channel.send(
                     `${Emojis.Certo} - ${message.author}, Bot removido com sucesso.`
                   );
+
+                  const member = message.guild.member(find.id);
+
+                  if (member)
+                    member.kick(`Bot Removido pelo Dono.`).catch(() => {});
 
                   await this.client.database.users.findOneAndUpdate(
                     { _id: message.author.id },

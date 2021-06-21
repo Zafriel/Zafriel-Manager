@@ -265,13 +265,20 @@ module.exports = class Verify extends Command {
                     .send(
                       `${Emojis.Errado} - ${USER}, seu Bot foi recusado, informações abaixo:\n\n> ${Emojis.User} Staff que Recusou: **${message.author.tag}** ( \`${message.author.id}\` )\n> ${Emojis.Reason} Motivo: **${reason}**`
                     )
-                    .catch((x) =>
+                    .catch(() =>
                       message.channel
                         .send(
                           `${Emojis.Errado} - ${message.author}, a **DM** do membro está fechada, portanto não foi possível enviar a mensagem para ele.`
                         )
                         .then((x) => x.delete({ timeout: 5000 }))
                     );
+
+                  const member = message.guild.member(target.id);
+
+                  if (member)
+                    member
+                      .kick(`Bot Recusado pelo(a) ${message.author.tag}`)
+                      .catch(() => {});
 
                   message.channel.send(
                     `${Emojis.Errado} - ${message.author}, você recusou o Bot ( **${target.tag}** ) do membro ${USER} com sucesso.`
@@ -304,12 +311,12 @@ module.exports = class Verify extends Command {
       });
   }
   async PUSH(list, bot) {
+    const guild = this.client.guilds.cache.get("601848654202011677");
+
     for (const bots of bot) {
       list.push({
         bot: await this.client.users.fetch(bots),
-        find: this.client.guilds.cache
-          .get(process.env.GUILD_ID)
-          .members.cache.find((x) => x.id === bots),
+        find: guild.members.cache.find((x) => x.id === bots),
       });
     }
   }

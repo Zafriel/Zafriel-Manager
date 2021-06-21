@@ -158,6 +158,7 @@ module.exports = class addBot extends Command {
               c.delete();
             });
         }
+
         const bot = await this.client.users.fetch(c.content);
 
         let date = moment.duration(Date.now() - bot.createdAt);
@@ -390,9 +391,7 @@ module.exports = class addBot extends Command {
               const EMBED_SEND = new ClientEmbed(bot)
                 .setTitle(`Novo Bot enviado para Verificação`)
                 .setDescription(
-                  `${message.author} seu Bot ( **${
-                    f.username
-                  }** ) foi enviado para verificação.`
+                  `${message.author} seu Bot ( **${f.username}** ) foi enviado para verificação.`
                 )
                 .setTimestamp()
                 .setThumbnail(

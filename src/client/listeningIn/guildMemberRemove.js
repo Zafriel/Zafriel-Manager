@@ -64,6 +64,6 @@ module.exports = class {
       .setFooter(`Bots removidos com Sucesso!`)
       .setTimestamp();
 
-    this.client.channels.cache.get("751976776607203408").send(EMBED);
+    this.client.channels.cache.get("855482567472840764").send(EMBED);
   }
 };

@@ -19,6 +19,7 @@ let userSchema = new Schema({
       verified: { type: Boolean, default: false },
     },
   ],
+  lastVote: { type: Number, default: 0 },
 });
 
 const User = mongoose.model("Users", userSchema);

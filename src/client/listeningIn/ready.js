@@ -33,5 +33,15 @@ module.exports = class {
 
     this.client.user.setStatus("dnd");
     console.log(c.red(`[Client] - Bot Ligado e Funcionando Com Sucesso.`));
+
+    setTimeout(async () => {
+      //await BotsRanking();
+    }, 5000);
+  }
+  async BotsRanking() {
+    const list_bots = await require("mongoose")
+    .connection.collection("users")
+    .find({ "vip.date": { $gt: 1 } })
+    .toArray();
   }
 };
